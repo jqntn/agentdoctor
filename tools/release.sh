@@ -50,6 +50,12 @@ if [ -n "$(git status --porcelain)" ]; then
 fi
 ok "working tree clean"
 
+# Checked here rather than at the commit step: failing after the substitution
+# has already rewritten files is the worst place to stop.
+git var GIT_AUTHOR_IDENT >/dev/null 2>&1 \
+  || die "git has no author identity. Run: git config --global user.name 'You' && git config --global user.email 'you@example.com'"
+ok "git identity $(git var GIT_AUTHOR_IDENT | sed 's/ [0-9].*//')"
+
 # ---------------------------------------------------------------------------
 # 1. Substitute placeholder URLs
 # ---------------------------------------------------------------------------

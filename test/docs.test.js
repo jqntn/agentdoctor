@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { allRules, CATEGORIES } from '../src/rules/index.js';
 
 const read = (name) => readFileSync(new URL(`../${name}`, import.meta.url).pathname, 'utf8');
@@ -67,4 +68,27 @@ test('no source file points at a URL outside links.js', async () => {
   };
   walk(root);
   assert.deepEqual(offenders, [], `hardcoded URLs found: ${offenders.join(', ')}`);
+});
+
+test('every tracked source file is plain text', async () => {
+  // Regression: the site generator once used NUL as a placeholder sentinel,
+  // which made grep, git diff and most editors treat the file as binary - so
+  // a contributor searching the repo would silently miss it.
+  const { execFileSync } = await import('node:child_process');
+  const root = new URL('..', import.meta.url).pathname;
+  const tracked = execFileSync('git', ['-C', root, 'ls-files'], { encoding: 'utf8' })
+    .split('\n').filter(Boolean)
+    .filter((f) => /\.(js|mjs|json|md|css|yml|svg|txt|sh)$/.test(f));
+
+  const offenders = [];
+  for (const file of tracked) {
+    const bytes = readFileSync(join(root, file));
+    if (bytes.includes(0)) { offenders.push(`${file}: contains NUL`); continue; }
+    try {
+      new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+    } catch {
+      offenders.push(`${file}: not valid UTF-8`);
+    }
+  }
+  assert.deepEqual(offenders, [], offenders.join('; '));
 });
