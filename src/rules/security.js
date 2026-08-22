@@ -532,14 +532,24 @@ export const securityRules = [
           });
           return;
         }
+        // Same ownership logic as security/world-writable-config: group-write
+        // only matters when the group is shared. A git checkout under the
+        // common umask 002 produces mode 775, so flagging group-write outright
+        // would fire on every cloned repository.
         const stats = statSync(resolved);
-        if ((stats.mode & 0o022) !== 0) {
+        const ownGid = typeof process.getgid === 'function' ? process.getgid() : null;
+        const otherWritable = (stats.mode & 0o002) !== 0;
+        const sharedGroup = (stats.mode & 0o020) !== 0 && ownGid !== null && stats.gid !== ownGid;
+        if (otherWritable || sharedGroup) {
           report({
             file,
             line: position.line,
             column: position.column,
             configPath,
-            message: `Hook script "${first}" is writable by other users (mode ${(stats.mode & 0o777).toString(8)}).`,
+            severity: otherWritable ? 'warning' : 'info',
+            message: otherWritable
+              ? `Hook script "${first}" is world-writable (mode ${(stats.mode & 0o777).toString(8)}), so any user on this machine can change what it runs.`
+              : `Hook script "${first}" is writable by group ${stats.gid} (mode ${(stats.mode & 0o777).toString(8)}), which is not your primary group.`,
           });
         }
       });

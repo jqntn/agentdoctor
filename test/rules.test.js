@@ -158,6 +158,27 @@ test('flags a world-writable config file, not a merely group-writable one', () =
   }
 });
 
+test('does not flag a hook script at a checkout-typical mode', () => {
+  // Regression: git checkout under umask 002 yields 775 for executables, so a
+  // group-writable hook script must not be a finding - it fired on every
+  // cloned repo before the ownership check matched world-writable-config.
+  const root = makeProject({
+    '.claude/settings.json': { hooks: { PreToolUse: [{ matcher: 'Bash', hooks: [{ type: 'command', command: '$CLAUDE_PROJECT_DIR/.claude/hooks/guard.sh' }] }] } },
+    '.claude/hooks/guard.sh': '#!/bin/sh\nexit 0\n',
+  });
+  try {
+    chmodSync(join(root, '.claude', 'hooks', 'guard.sh'), 0o775);
+    assert.equal(findingsFor(scan(root), 'security/hook-script-not-executable').length, 0);
+    // But a world-writable hook script is still a real hazard.
+    chmodSync(join(root, '.claude', 'hooks', 'guard.sh'), 0o777);
+    const hits = findingsFor(scan(root), 'security/hook-script-not-executable');
+    assert.equal(hits.length, 1);
+    assert.match(hits[0].message, /world-writable/);
+  } finally {
+    cleanup(root);
+  }
+});
+
 test('flags a hook whose script does not exist', () => {
   const hits = expectRule({
     '.claude/settings.json': { hooks: { PreToolUse: [{ matcher: 'Bash', hooks: [{ type: 'command', command: '.claude/hooks/missing.sh' }] }] } },
