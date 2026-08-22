@@ -1,0 +1,8 @@
+# Normalize to LF everywhere. The skill install guarantees byte-identity
+# between the packaged files and what --init-skill writes, which CRLF
+# conversion on Windows checkouts would silently break.
+* text=auto eol=lf
+
+# Generated; not worth reviewing in diffs.
+docs/rules.md linguist-generated=true
+tools/demo-output.txt linguist-generated=true

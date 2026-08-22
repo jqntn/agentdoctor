@@ -4,7 +4,8 @@ import { chmodSync } from 'node:fs';
 import { join } from 'node:path';
 import { run } from '../src/index.js';
 import { allRules } from '../src/rules/index.js';
-import { makeProject, cleanup, withSettings, firedRules, findingsFor } from './helpers.js';
+import { makeProject, cleanup, withSettings, firedRules, findingsFor, posixOnly } from './helpers.js';
+import { fileURLToPath } from 'node:url';
 
 const scan = (root, options = {}) => run(root, { includeUserScope: false, ...options });
 
@@ -145,7 +146,7 @@ test('flags credentials embedded in an MCP url', () => {
   expectNoRule({ '.mcp.json': { mcpServers: { a: { url: 'https://x.test/mcp' } } } }, 'security/mcp-plaintext-url-credential');
 });
 
-test('flags a world-writable config file, not a merely group-writable one', () => {
+test('flags a world-writable config file, not a merely group-writable one', posixOnly, () => {
   const root = makeProject({ '.claude/settings.json': { model: 'sonnet' } });
   try {
     chmodSync(join(root, '.claude', 'settings.json'), 0o666);
@@ -158,7 +159,7 @@ test('flags a world-writable config file, not a merely group-writable one', () =
   }
 });
 
-test('does not flag a hook script at a checkout-typical mode', () => {
+test('does not flag a hook script at a checkout-typical mode', posixOnly, () => {
   // Regression: git checkout under umask 002 yields 775 for executables, so a
   // group-writable hook script must not be a finding - it fired on every
   // cloned repo before the ownership check matched world-writable-config.
@@ -379,12 +380,12 @@ test('no rule crashes on an empty project or on hostile input', () => {
 });
 
 test('a well-configured project produces no findings at all', () => {
-  const result = scan(new URL('./fixtures/clean', import.meta.url).pathname);
+  const result = scan(fileURLToPath(new URL('./fixtures/clean', import.meta.url)));
   assert.deepEqual(result.findings, [], `unexpected findings: ${result.findings.map((f) => `${f.ruleId} ${f.message}`).join(' | ')}`);
 });
 
 test('the messy fixture produces findings across every free category', () => {
-  const result = scan(new URL('./fixtures/messy', import.meta.url).pathname);
+  const result = scan(fileURLToPath(new URL('./fixtures/messy', import.meta.url)));
   const categories = new Set(result.findings.map((f) => f.category));
   for (const category of ['security', 'correctness', 'cost', 'hygiene']) {
     assert.ok(categories.has(category), `expected a ${category} finding`);
@@ -393,7 +394,7 @@ test('the messy fixture produces findings across every free category', () => {
 });
 
 test('severity filtering and rule disabling both work', () => {
-  const root = new URL('./fixtures/messy', import.meta.url).pathname;
+  const root = fileURLToPath(new URL('./fixtures/messy', import.meta.url));
   const errorsOnly = scan(root, { minSeverity: 'error' });
   assert.ok(errorsOnly.findings.every((f) => f.severity === 'error'));
   const withoutSecurity = scan(root, { disabled: ['security'] });
