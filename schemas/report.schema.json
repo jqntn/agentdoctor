@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://REPLACE_ME.github.io/agentdoctor/schemas/report.schema.json",
+  "title": "agentdoctor JSON report (format version 1)",
+  "description": "Shape of `agentdoctor --json`. Additions are the only change ever made to version 1.",
+  "type": "object",
+  "required": ["version", "tool", "toolVersion", "root", "scannedFiles", "skippedFiles", "rulesRun", "suppressed", "summary", "findings"],
+  "properties": {
+    "version": { "const": 1 },
+    "tool": { "const": "agentdoctor" },
+    "toolVersion": { "type": "string" },
+    "root": { "type": "string" },
+    "scannedFiles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "kind", "scope", "bytes"],
+        "properties": {
+          "path": { "type": "string" },
+          "kind": { "enum": ["settings", "mcp", "memory", "agent", "skill", "command", "hook", "keybindings"] },
+          "scope": { "enum": ["project", "local", "user", "enterprise"] },
+          "bytes": { "type": "integer" }
+        }
+      }
+    },
+    "skippedFiles": { "type": "array", "items": { "type": "string" } },
+    "rulesRun": { "type": "array", "items": { "type": "string" } },
+    "suppressed": { "type": "integer" },
+    "summary": {
+      "type": "object",
+      "required": ["error", "warning", "info"],
+      "properties": {
+        "error": { "type": "integer" }, "warning": { "type": "integer" }, "info": { "type": "integer" }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["ruleId", "severity", "category", "message", "file", "absolutePath", "line"],
+        "properties": {
+          "ruleId": { "type": "string", "pattern": "^[a-z]+/[a-z0-9-]+$" },
+          "severity": { "enum": ["error", "warning", "info"] },
+          "category": { "enum": ["correctness", "security", "cost", "hygiene", "policy", "internal"] },
+          "message": { "type": "string" },
+          "help": { "type": ["string", "null"] },
+          "file": { "type": "string", "description": "Display path (repo-relative or ~-prefixed)" },
+          "absolutePath": { "type": "string" },
+          "line": { "type": "integer", "minimum": 1 },
+          "column": { "type": ["integer", "null"] },
+          "configPath": { "type": ["string", "null"] },
+          "snippet": { "type": ["string", "null"], "description": "Offending value; secrets are redacted" }
+        }
+      }
+    }
+  }
+}

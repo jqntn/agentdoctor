@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "sketchy": { "command": "npx", "args": ["-y", "@vendor/mcp-server@latest"] },
+    "broken": { "args": ["--port", "3000"] },
+    "leaky": { "url": "https://api.vendor.com/mcp?api_key=abcdef1234567890abcdef" },
+    "pinned": { "command": "npx", "args": ["-y", "@vendor/other@2.1.4"] }
+  }
+}

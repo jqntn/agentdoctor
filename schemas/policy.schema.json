@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://REPLACE_ME.github.io/agentdoctor/schemas/policy.schema.json",
+  "title": "agentdoctor team policy",
+  "description": "Org-wide standards for AI coding-agent configuration, enforced by the policy/* rules when this file is committed at the repo root as agentdoctor.policy.json.",
+  "type": "object",
+  "properties": {
+    "requiredDeny": {
+      "type": "array", "items": { "type": "string" },
+      "description": "Permission deny rules every repo must carry, e.g. \"Read(./.env*)\". A single * is literal; ** is the wildcard."
+    },
+    "forbiddenAllow": {
+      "type": "array", "items": { "type": "string" },
+      "description": "Permission allow rules no repo may carry, e.g. \"Bash(*)\" (that exact rule) or \"Bash(**sudo**)\" (any Bash rule mentioning sudo)."
+    },
+    "allowedMcpServers": {
+      "type": "array", "items": { "type": "string" },
+      "description": "Approved MCP server names (** wildcards allowed). If present, unlisted servers are errors. Omit the field to skip the check; an empty array approves none."
+    },
+    "requiredHooks": {
+      "type": "array",
+      "items": { "enum": ["PreToolUse", "PostToolUse", "UserPromptSubmit", "Notification", "Stop", "SubagentStop", "PreCompact", "SessionStart", "SessionEnd"] },
+      "description": "Hook events that must be configured in every repo."
+    },
+    "maxMemoryTokens": {
+      "type": "number", "exclusiveMinimum": 0,
+      "description": "Ceiling on the estimated token size of project memory files (CLAUDE.md et al., user scope excluded)."
+    },
+    "forbiddenPermissionModes": {
+      "type": "array",
+      "items": { "enum": ["default", "acceptEdits", "plan", "bypassPermissions"] },
+      "description": "Values of permissions.defaultMode that no repo may set. Usually [\"bypassPermissions\"]."
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm test:*)",
+      "Bash(npm run lint)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Read(./src/**)",
+      "WebFetch(domain:docs.anthropic.com)"
+    ],
+    "deny": [
+      "Read(./.env*)",
+      "Read(**/.ssh/**)",
+      "Read(**/*.pem)",
+      "Read(**/.aws/credentials)",
+      "Bash(curl:*)"
+    ],
+    "ask": ["Bash(git push:*)"],
+    "defaultMode": "default",
+    "disableBypassPermissionsMode": "disable"
+  },
+  "env": { "NODE_ENV": "test" },
+  "model": "sonnet",
+  "cleanupPeriodDays": 30,
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Write",
+        "hooks": [
+          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/guard.sh", "timeout": 10 }
+        ]
+      }
+    ]
+  }
+}
