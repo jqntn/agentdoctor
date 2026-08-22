@@ -57,29 +57,24 @@ Each `--init-*` command writes exactly one well-known file, refuses to overwrite
 if the file already exists - so re-running is always safe. `--badge` prints README markdown
 showing the current grade if the user wants it displayed.
 
-## A ready-made Claude Code skill
+## The standalone skill and plugin
 
-Drop this in `.claude/skills/config-audit/SKILL.md` to give Claude Code a first-class audit
-command (also shipped in the repo under `examples/claude-skill/`):
+The canonical skill lives at [`skills/config-audit/`](https://github.com/REPLACE_ME/agentdoctor/tree/main/skills/config-audit)
+in the repo and inside the npm package. It contains the audit -> fix workflow plus
+`references/fix-recipes.md` with per-rule fix patterns, and its `description` frontmatter is
+written to trigger on config-audit requests, edits to `.claude/` files, and "my hook isn't
+firing" symptoms.
 
-```markdown
----
-name: config-audit
-description: Use this skill whenever the user asks to audit, lint, review or fix their
-  agent configuration, .claude directory, hooks, permissions, or MCP servers, or after
-  making changes to any of those files.
----
+Three ways to install it:
 
-Run `npx agentdoctor . --no-user --json` and parse the findings.
+| Method | Command | Scope |
+|---|---|---|
+| Claude Code plugin | `/plugin marketplace add REPLACE_ME/agentdoctor` then `/plugin install agentdoctor` | everywhere (also adds `/agentdoctor:audit`) |
+| CLI | `npx agentdoctor --init-skill` | this project |
+| Manual | `cp -r node_modules/agentdoctor/skills/config-audit .claude/skills/` | anywhere |
 
-For each finding, most severe first: explain the problem in one line, then apply the fix
-described in the `help` field by editing `file` at `line` (the `configPath` field names the
-exact config key). If a finding is clearly intentional for this project, add an
-`agentdoctor-disable <ruleId>` comment to the file instead, and say why.
-
-After edits, re-run with `--quiet` and report the exit code. Never delete a deny rule to
-silence a finding.
-```
+All three install the same files - `--init-skill` copies them out of the package, so the
+installed skill cannot drift from the published one (test-enforced).
 
 ## For agents working on this repository
 

@@ -47,7 +47,8 @@
     "README.md",
     "LICENSE",
     "docs",
-    "schemas"
+    "schemas",
+    "skills"
   ],
   "scripts": {
     "test": "node --test",

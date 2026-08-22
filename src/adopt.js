@@ -7,8 +7,9 @@
  * lose people (and agents) - these close that gap in a single action that is
  * safe to run unattended.
  */
-import { existsSync, writeFileSync, mkdirSync } from 'node:fs';
+import { existsSync, writeFileSync, mkdirSync, cpSync } from 'node:fs';
 import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { computeGrade, GRADE_COLORS } from './grade.js';
 import { REPO_URL, BADGE_BASE_URL } from './links.js';
 
@@ -50,23 +51,14 @@ jobs:
       - run: npx agentdoctor --no-user --quiet
 `;
 
-export const SKILL_PATH = '.claude/skills/config-audit/SKILL.md';
+export const SKILL_PATH = '.claude/skills/config-audit';
 
-const SKILL = `---
-name: config-audit
-description: Use this skill whenever the user asks to audit, lint, review or fix their agent configuration, .claude directory, hooks, permissions, or MCP servers, or after making changes to any of those files.
----
-
-Run \`npx agentdoctor . --no-user --json\` and parse the findings.
-
-For each finding, most severe first: explain the problem in one line, then apply the fix
-described in the \`help\` field by editing \`file\` at \`line\` (the \`configPath\` field names the
-exact config key). If a finding is clearly intentional for this project, add an
-\`agentdoctor-disable <ruleId>\` comment to the file instead, and say why.
-
-After edits, re-run with \`--quiet\` and report the exit code. Never delete a deny rule to
-silence a finding.
-`;
+/**
+ * The canonical skill ships inside the package at skills/config-audit/ - the
+ * same files served by the plugin marketplace - so an installed skill can
+ * never drift from the published one.
+ */
+const PACKAGED_SKILL = join(dirname(fileURLToPath(import.meta.url)), '..', 'skills', 'config-audit');
 
 /** Writes a file if absent. Returns a { written, path, message } outcome. */
 function writeOnce(root, relative, contents) {
@@ -84,7 +76,12 @@ export function initCi(root) {
 }
 
 export function initSkill(root) {
-  return writeOnce(root, SKILL_PATH, SKILL);
+  const target = join(root, SKILL_PATH);
+  if (existsSync(target)) {
+    return { written: false, path: SKILL_PATH, message: `${SKILL_PATH} already exists; not overwriting.` };
+  }
+  cpSync(PACKAGED_SKILL, target, { recursive: true });
+  return { written: true, path: SKILL_PATH, message: `Wrote ${SKILL_PATH}/ (SKILL.md + fix recipes)` };
 }
 
 /**

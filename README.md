@@ -160,9 +160,17 @@ agentdoctor --baseline .agentdoctor-baseline.json          # in CI
 Every capability is non-interactive and machine-readable: `--json` (stable schema, shipped as
 [JSON Schema](schemas/report.schema.json)), `--sarif`, `--explain`, `--list-rules --json`,
 deterministic ordering, redacted secrets safe for model context, pipe-safe output. The docs
-site serves `llms.txt` and raw markdown. There is a
-[ready-made Claude Code skill](examples/claude-skill/config-audit/SKILL.md) that turns
-findings into fixes.
+site serves `llms.txt` and raw markdown.
+
+The repo is also a **Claude Code plugin**: it ships the
+[config-audit skill](skills/config-audit/SKILL.md) (audit -> fix loop, with fix recipes) and
+an `/agentdoctor:audit` command. Install it any of three ways:
+
+```
+/plugin marketplace add REPLACE_ME/agentdoctor    # in Claude Code, then: /plugin install agentdoctor
+npx agentdoctor --init-skill                      # copies the skill into this project
+cp -r node_modules/agentdoctor/skills/config-audit .claude/skills/   # manual
+```
 
 [Agent guide](docs/agents.md)
 
