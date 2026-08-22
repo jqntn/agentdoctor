@@ -28,6 +28,9 @@ src/links.js             every outbound URL — nothing else may contain one
 test/fixtures/clean/     a correct project: MUST produce zero findings
 test/fixtures/messy/     a broken project: broad rule coverage
 docs/*.md                source of truth for the site; rules.md is GENERATED
+skills/config-audit/     the canonical standalone skill; --init-skill copies it verbatim
+.claude-plugin/          plugin + marketplace manifests (repo installs as a Claude Code plugin)
+commands/audit.md        the /agentdoctor:audit slash command
 ```
 
 ## Invariants (all test-enforced — breaking one fails `npm test`)
@@ -64,4 +67,5 @@ docs/*.md                source of truth for the site; rules.md is GENERATED
 ## Releasing
 
 `npm test` → `node bin/agentdoctor.js .` → update CHANGELOG.md → bump `version` in
-package.json AND `VERSION` in `src/index.js` (a test asserts they match) → `npm publish`.
+package.json, `VERSION` in `src/index.js`, AND `.claude-plugin/plugin.json` (tests assert all
+three match) → `npm publish`.

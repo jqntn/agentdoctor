@@ -76,26 +76,30 @@ test('--init-ci writes a working workflow once and refuses to overwrite', () => 
   }
 });
 
-test('--init-skill writes the audit skill once and refuses to overwrite', () => {
+test('--init-skill installs the full skill once and refuses to overwrite', () => {
   const root = makeProject({ 'README.md': 'x' });
   try {
     assert.equal(cli(['--init-skill', root]).code, 0);
     const skill = readFileSync(join(root, '.claude/skills/config-audit/SKILL.md'), 'utf8');
     assert.match(skill, /^---\nname: config-audit\n/);
-    assert.match(skill, /Never delete a deny rule/);
+    assert.match(skill, /Never delete or weaken/);
+    assert.ok(existsSync(join(root, '.claude/skills/config-audit/references/fix-recipes.md')),
+      'the fix recipes must ship with the skill');
     assert.equal(cli(['--init-skill', root]).code, 2);
   } finally {
     cleanup(root);
   }
 });
 
-test('the written skill matches the shipped example, so the two cannot drift', () => {
+test('the installed skill is byte-identical to the packaged one, so the two cannot drift', () => {
   const root = makeProject({ 'README.md': 'x' });
   try {
     cli(['--init-skill', root]);
-    const written = readFileSync(join(root, '.claude/skills/config-audit/SKILL.md'), 'utf8');
-    const example = readFileSync(new URL('../examples/claude-skill/config-audit/SKILL.md', import.meta.url).pathname, 'utf8');
-    assert.equal(written.trim(), example.trim());
+    for (const file of ['SKILL.md', 'references/fix-recipes.md']) {
+      const written = readFileSync(join(root, '.claude/skills/config-audit', file), 'utf8');
+      const packaged = readFileSync(new URL(`../skills/config-audit/${file}`, import.meta.url).pathname, 'utf8');
+      assert.equal(written, packaged, `${file} drifted`);
+    }
   } finally {
     cleanup(root);
   }
