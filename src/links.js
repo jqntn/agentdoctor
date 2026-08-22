@@ -6,3 +6,4 @@
  */
 export const REPO_URL = 'https://github.com/REPLACE_ME/agentdoctor';
 export const ISSUES_URL = 'https://github.com/REPLACE_ME/agentdoctor/issues';
+export const BADGE_BASE_URL = 'https://img.shields.io/badge';

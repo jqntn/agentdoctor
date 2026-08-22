@@ -48,6 +48,15 @@ agentdoctor --min-severity warning
 | `--policy <file>` | Policy file path (default: `agentdoctor.policy.json` at the root) |
 | `--init-policy` | Write a starter policy file ([guide](policy.md)) |
 
+### Adopt & share
+
+| Flag | Effect |
+|---|---|
+| `--init-ci` | Write `.github/workflows/agentdoctor.yml`: SARIF annotations + exit-code gate. Refuses to overwrite. |
+| `--init-skill` | Write `.claude/skills/config-audit/SKILL.md`, a Claude Code skill that audits and fixes config. Refuses to overwrite. |
+| `--badge` | Print README markdown for a badge showing the current grade |
+| `--share` | Print a paste-ready score card: grade, counts, top rule ids. Never includes messages, paths, or snippets, so it is safe to share from private repos. Always exits 0. |
+
 ### Introspection
 
 | Flag | Effect |

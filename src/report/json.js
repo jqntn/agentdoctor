@@ -1,3 +1,5 @@
+import { computeGrade } from '../grade.js';
+
 /** Machine-readable report. Stable shape - treat additions as the only change. */
 export function renderJson(input) {
   return JSON.stringify({
@@ -11,6 +13,7 @@ export function renderJson(input) {
     skippedFiles: input.workspace.skipped ?? [],
     rulesRun: input.ran,
     suppressed: input.suppressed,
+    grade: computeGrade(input.findings),
     summary: {
       error: input.findings.filter((f) => f.severity === 'error').length,
       warning: input.findings.filter((f) => f.severity === 'warning').length,

@@ -33,4 +33,5 @@ agentdoctor scanned 1 config file in /work/api
                     project settings to stop anyone opting out of prompts in this repo.
                  security/bypass-mode-not-locked
 
-Summary  3 errors, 2 info  - 72 rules in 11ms
+Summary  Grade F  3 errors, 2 info  - 72 rules in 11ms
+         Share the grade: agentdoctor --share  -  gate it in CI: agentdoctor --init-ci

@@ -26,6 +26,7 @@
     "skippedFiles": { "type": "array", "items": { "type": "string" } },
     "rulesRun": { "type": "array", "items": { "type": "string" } },
     "suppressed": { "type": "integer" },
+    "grade": { "enum": ["A+", "A", "B", "C", "D", "F"], "description": "Health grade. A+ zero findings; A info only; B 1-2 warnings; C 3+ warnings; D 1-2 errors; F 3+ errors." },
     "summary": {
       "type": "object",
       "required": ["error", "warning", "info"],
