@@ -69,9 +69,9 @@ ok "git identity $(git var GIT_AUTHOR_IDENT | sed 's/ [0-9].*//')"
 # 1. Substitute placeholder URLs
 # ---------------------------------------------------------------------------
 step "Setting project URLs to github.com/${GH_USER}/${REPO_NAME}"
-FILES="$(git grep -l REPLACE_ME || true)"
-[ -n "$FILES" ] && echo "$FILES" | xargs sed -i "s/REPLACE_ME/${GH_USER}/g"
-! git grep -q REPLACE_ME || die "REPLACE_ME survived the substitution"
+FILES="$(git grep -l jqntn || true)"
+[ -n "$FILES" ] && echo "$FILES" | xargs sed -i "s/jqntn/${GH_USER}/g"
+! git grep -q jqntn || die "jqntn survived the substitution"
 ok "$(echo "$FILES" | wc -l) files updated"
 
 # ---------------------------------------------------------------------------

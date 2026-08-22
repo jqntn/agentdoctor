@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://REPLACE_ME.github.io/agentdoctor/schemas/report.schema.json",
+  "$id": "https://jqntn.github.io/agentdoctor/schemas/report.schema.json",
   "title": "agentdoctor JSON report (format version 1)",
   "description": "Shape of `agentdoctor --json`. Additions are the only change ever made to version 1.",
   "type": "object",

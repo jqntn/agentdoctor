@@ -65,7 +65,7 @@ agent that can run a shell command can use agentdoctor. What differs per tool is
 
 | Agent | Mechanism | Install |
 |---|---|---|
-| Claude Code | Skill + plugin (`/agentdoctor:audit`) | `/plugin marketplace add REPLACE_ME/agentdoctor` or `npx agentdoctor --init-skill` |
+| Claude Code | Skill + plugin (`/agentdoctor:audit`) | `/plugin marketplace add jqntn/agentdoctor` or `npx agentdoctor --init-skill` |
 | OpenAI Codex | `AGENTS.md` | `npx agentdoctor --init-agents` |
 | Cursor | `AGENTS.md` | `npx agentdoctor --init-agents` |
 | Gemini CLI / Jules | `AGENTS.md` | `npx agentdoctor --init-agents` |
@@ -93,7 +93,7 @@ cp node_modules/agentdoctor/skills/config-audit/SKILL.md ~/.codex/prompts/audit-
 
 ## The standalone skill and plugin
 
-The canonical skill lives at [`skills/config-audit/`](https://github.com/REPLACE_ME/agentdoctor/tree/main/skills/config-audit)
+The canonical skill lives at [`skills/config-audit/`](https://github.com/jqntn/agentdoctor/tree/main/skills/config-audit)
 in the repo and inside the npm package. It contains the audit -> fix workflow plus
 `references/fix-recipes.md` with per-rule fix patterns, and its `description` frontmatter is
 written to trigger on config-audit requests, edits to `.claude/` files, and "my hook isn't
@@ -103,7 +103,7 @@ Three ways to install it:
 
 | Method | Command | Scope |
 |---|---|---|
-| Claude Code plugin | `/plugin marketplace add REPLACE_ME/agentdoctor` then `/plugin install agentdoctor` | everywhere (also adds `/agentdoctor:audit`) |
+| Claude Code plugin | `/plugin marketplace add jqntn/agentdoctor` then `/plugin install agentdoctor` | everywhere (also adds `/agentdoctor:audit`) |
 | CLI | `npx agentdoctor --init-skill` | this project |
 | Manual | `cp -r node_modules/agentdoctor/skills/config-audit .claude/skills/` | anywhere |
 
@@ -114,6 +114,6 @@ installed skill cannot drift from the published one (test-enforced).
 
 The repo root carries an `AGENTS.md` (mirrored by `CLAUDE.md`) with the build/test commands,
 the architectural invariants, and the rules for adding rules. The docs site serves
-[`llms.txt`](https://REPLACE_ME.github.io/agentdoctor/llms.txt) and a concatenated
+[`llms.txt`](https://jqntn.github.io/agentdoctor/llms.txt) and a concatenated
 `llms-full.txt`, and every docs page is also available as raw markdown at the same URL with
 `.md` — agents should prefer those over scraping HTML.

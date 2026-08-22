@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://REPLACE_ME.github.io/agentdoctor/schemas/policy.schema.json",
+  "$id": "https://jqntn.github.io/agentdoctor/schemas/policy.schema.json",
   "title": "agentdoctor team policy",
   "description": "Org-wide standards for AI coding-agent configuration, enforced by the policy/* rules when this file is committed at the repo root as agentdoctor.policy.json.",
   "type": "object",

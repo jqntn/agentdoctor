@@ -15,7 +15,7 @@ import { VERSION } from '../src/index.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'site');
-const BASE_URL = 'https://REPLACE_ME.github.io/agentdoctor';
+const BASE_URL = 'https://jqntn.github.io/agentdoctor';
 
 /** Docs shown in the sidebar, in reading order. */
 const DOCS = [
@@ -191,11 +191,11 @@ const LOGO_INLINE = `<span class="mark" aria-hidden="true"><svg viewBox="0 0 128
 
 function header(rel) {
   return `<header class="top"><a class="brand" href="${rel}index.html">${LOGO_INLINE}<span>agent<em>doctor</em></span></a>
-<nav><a href="${rel}docs/getting-started.html">Docs</a><a href="${rel}docs/rules.html">Rules</a><a href="${rel}llms.txt">llms.txt</a><a href="https://github.com/REPLACE_ME/agentdoctor" rel="noopener">GitHub</a></nav></header>`;
+<nav><a href="${rel}docs/getting-started.html">Docs</a><a href="${rel}docs/rules.html">Rules</a><a href="${rel}llms.txt">llms.txt</a><a href="https://github.com/jqntn/agentdoctor" rel="noopener">GitHub</a></nav></header>`;
 }
 
 const FOOTER = `<footer><p>MIT licensed. Zero dependencies. No telemetry - this site has no analytics either.</p>
-<p><a href="https://github.com/REPLACE_ME/agentdoctor" rel="noopener">GitHub</a> &middot; <a href="https://www.npmjs.com/package/agentdoctor" rel="noopener">npm</a> &middot; <a href="llms.txt">llms.txt</a> &middot; <a href="llms-full.txt">llms-full.txt</a></p></footer>`;
+<p><a href="https://github.com/jqntn/agentdoctor" rel="noopener">GitHub</a> &middot; <a href="https://www.npmjs.com/package/agentdoctor" rel="noopener">npm</a> &middot; <a href="llms.txt">llms.txt</a> &middot; <a href="llms-full.txt">llms-full.txt</a></p></footer>`;
 
 // ---------------------------------------------------------------------------
 // Build
@@ -244,7 +244,7 @@ const landingBody = `${header('')}
   <div class="cta">
     <pre class="install"><code>npx agentdoctor</code></pre>
     <a class="btn" href="docs/getting-started.html">Get started</a>
-    <a class="btn ghost" href="https://github.com/REPLACE_ME/agentdoctor" rel="noopener">Star on GitHub</a>
+    <a class="btn ghost" href="https://github.com/jqntn/agentdoctor" rel="noopener">Star on GitHub</a>
   </div>
 </section>
 
@@ -324,7 +324,7 @@ const llms = [`# agentdoctor`, '',
   'To install permanently (each command writes one file, refuses to overwrite, safe unattended):', '',
   '- `npx agentdoctor --init-ci` - GitHub Actions workflow: SARIF PR annotations + error gate',
   '- `npx agentdoctor --init-skill` - installs the config-audit skill (audit-and-fix workflow + per-rule fix recipes) into this project',
-  '- Claude Code plugin (global): `/plugin marketplace add REPLACE_ME/agentdoctor` then `/plugin install agentdoctor` - adds the skill everywhere plus an /agentdoctor:audit command',
+  '- Claude Code plugin (global): `/plugin marketplace add jqntn/agentdoctor` then `/plugin install agentdoctor` - adds the skill everywhere plus an /agentdoctor:audit command',
   '- `npx agentdoctor --init-agents` - adds a marked audit section to AGENTS.md, read by OpenAI Codex, Cursor, Gemini CLI and other coding agents',
   '- `npx agentdoctor --write-baseline .agentdoctor-baseline.json` - only if findings exist today', '',
   '## Docs', '',
@@ -333,7 +333,7 @@ const llms = [`# agentdoctor`, '',
   `- [Full documentation in one file](${BASE_URL}/llms-full.txt)`,
   `- [Policy file JSON Schema](${BASE_URL}/schemas/policy.schema.json)`,
   `- [Report JSON Schema](${BASE_URL}/schemas/report.schema.json)`,
-  `- [Repository](https://github.com/REPLACE_ME/agentdoctor)`, ''].join('\n');
+  `- [Repository](https://github.com/jqntn/agentdoctor)`, ''].join('\n');
 writeFileSync(join(OUT, 'llms.txt'), llms);
 
 const full = DOCS.map(([name]) => readFileSync(join(ROOT, 'docs', `${name}.md`), 'utf8')).join('\n\n---\n\n');
