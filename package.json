@@ -54,7 +54,8 @@
     "test": "node --test",
     "selfcheck": "node bin/agentdoctor.js --version",
     "test:coverage": "node --test --experimental-test-coverage",
-    "docs": "node tools/gen-docs.mjs && node tools/build-site.mjs"
+    "docs": "node tools/gen-docs.mjs && node tools/build-site.mjs",
+    "commits": "node tools/check-commits.mjs HEAD"
   },
   "dependencies": {},
   "devDependencies": {}

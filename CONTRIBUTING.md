@@ -34,6 +34,36 @@ Then regenerate the rule reference:
 node tools/gen-docs.mjs
 ```
 
+## Commit messages
+
+[Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/), validated in CI
+and by an optional local hook:
+
+```
+type(optional-scope): description
+
+optional body
+
+optional footer
+```
+
+Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`,
+`revert`. Scopes are the area touched: `rules`, `engine`, `parse`, `report`, `adopt`, `site`,
+`plugin`, `docs`, `deps`.
+
+Rules the validator enforces: lowercase description, no trailing period, subject under 72
+characters, a blank line before the body, and `!` in the subject whenever there is a
+`BREAKING CHANGE:` footer.
+
+```sh
+node tools/check-commits.mjs --install-hook   # validate as you commit (recommended)
+node tools/check-commits.mjs HEAD             # validate the whole history
+node tools/check-commits.mjs origin/main..HEAD
+```
+
+Good: `fix(rules): stop flagging group-writable hook scripts in clones`
+Bad: `Fixed a bug.`
+
 ## Ground rules
 
 - **Zero dependencies stays zero.** This is a security tool; its own supply chain is part of

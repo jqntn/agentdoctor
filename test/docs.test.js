@@ -92,3 +92,19 @@ test('every tracked source file is plain text', async () => {
   }
   assert.deepEqual(offenders, [], offenders.join('; '));
 });
+
+test('the whole git history follows Conventional Commits', async () => {
+  // The convention is only worth having if it is enforced; CI checks PR
+  // commits, and this checks the history that is already here.
+  const { execFileSync } = await import('node:child_process');
+  const root = new URL('..', import.meta.url).pathname;
+  const { validate } = await import('../tools/check-commits.mjs');
+  const raw = execFileSync('git', ['-C', root, 'log', '--format=%H%x00%B%x1e'], { encoding: 'utf8' });
+  const offenders = [];
+  for (const entry of raw.split('\x1e').map((e) => e.trim()).filter(Boolean)) {
+    const [sha, message] = entry.split('\x00');
+    const problems = validate(message);
+    if (problems.length) offenders.push(`${sha.slice(0, 8)}: ${problems.join('; ')}`);
+  }
+  assert.deepEqual(offenders, [], offenders.join(' | '));
+});

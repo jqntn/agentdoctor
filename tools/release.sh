@@ -3,7 +3,10 @@
 # One-command release. Does every remaining step: substitutes the placeholder
 # URLs, fills the identity fields npm needs, verifies, tags, pushes, publishes.
 #
-#   ./tools/release.sh <github-user> [author-name] [author-email]
+#   ./tools/release.sh [github-user] [author-name] [author-email]
+#
+# With no arguments it uses the authenticated `gh` account and the maintainer
+# identity below.
 #
 # Requires you to be authenticated first (these are the steps that need a
 # person, and the script checks them up front rather than failing halfway):
@@ -15,16 +18,17 @@
 
 set -euo pipefail
 
+# The GitHub username defaults to whoever `gh` is authenticated as, so there is
+# nothing to guess and no way to publish under a mistyped account.
 GH_USER="${1:-}"
-AUTHOR_NAME="${2:-$GH_USER}"
-AUTHOR_EMAIL="${3:-}"
+AUTHOR_NAME="${2:-Julien QUENTIN}"
+AUTHOR_EMAIL="${3:-jqntn88@gmail.com}"
 REPO_NAME="agentdoctor"
 
 die() { printf '\033[31merror\033[0m %s\n' "$*" >&2; exit 1; }
 step() { printf '\n\033[1m==> %s\033[0m\n' "$*"; }
 ok() { printf '\033[32m  ok\033[0m %s\n' "$*"; }
 
-[ -n "$GH_USER" ] || die "usage: ./tools/release.sh <github-user> [author-name] [author-email]"
 [ -f package.json ] || die "run this from the repository root"
 
 # ---------------------------------------------------------------------------
@@ -34,7 +38,12 @@ step "Preflight"
 command -v node >/dev/null || die "node is required"
 command -v gh   >/dev/null || die "gh is required: https://cli.github.com"
 gh auth status >/dev/null 2>&1 || die "not logged in to GitHub. Run: gh auth login"
-ok "GitHub authenticated as $(gh api user --jq .login)"
+GH_LOGIN="$(gh api user --jq .login)"
+ok "GitHub authenticated as ${GH_LOGIN}"
+[ -n "$GH_USER" ] || GH_USER="$GH_LOGIN"
+if [ "$GH_USER" != "$GH_LOGIN" ]; then
+  printf '  note: publishing under "%s" while authenticated as "%s"\n' "$GH_USER" "$GH_LOGIN"
+fi
 NPM_USER="$(npm whoami 2>/dev/null || true)"
 [ -n "$NPM_USER" ] || die "not logged in to npm. Run: npm login"
 ok "npm authenticated as $NPM_USER"
@@ -111,9 +120,10 @@ node bin/agentdoctor.js . --no-user --quiet && ok "self-audit clean (grade A+)" 
 node tools/gen-docs.mjs >/dev/null && ok "rule reference regenerated"
 node tools/build-site.mjs >/dev/null && ok "docs site builds"
 npm pack --dry-run >/dev/null 2>&1 && ok "package tarball valid"
+node tools/check-commits.mjs HEAD >/dev/null && ok "commit messages conform" || die "commit messages do not follow Conventional Commits"
 
 git add -A
-git commit -q -m "Set project URLs and package metadata for ${GH_USER}/${REPO_NAME}"
+git commit -q -m "chore(release): set project URLs and package metadata"
 ok "committed"
 
 # ---------------------------------------------------------------------------
