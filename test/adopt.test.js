@@ -5,10 +5,11 @@ import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { computeGrade } from '../src/grade.js';
 import { makeProject, cleanup } from './helpers.js';
+import { fileURLToPath } from 'node:url';
 
-const CLI = new URL('../bin/agentdoctor.js', import.meta.url).pathname;
-const MESSY = new URL('./fixtures/messy', import.meta.url).pathname;
-const CLEAN = new URL('./fixtures/clean', import.meta.url).pathname;
+const CLI = fileURLToPath(new URL('../bin/agentdoctor.js', import.meta.url));
+const MESSY = fileURLToPath(new URL('./fixtures/messy', import.meta.url));
+const CLEAN = fileURLToPath(new URL('./fixtures/clean', import.meta.url));
 
 function cli(args) {
   try {
@@ -97,7 +98,7 @@ test('the installed skill is byte-identical to the packaged one, so the two cann
     cli(['--init-skill', root]);
     for (const file of ['SKILL.md', 'references/fix-recipes.md']) {
       const written = readFileSync(join(root, '.claude/skills/config-audit', file), 'utf8');
-      const packaged = readFileSync(new URL(`../skills/config-audit/${file}`, import.meta.url).pathname, 'utf8');
+      const packaged = readFileSync(fileURLToPath(new URL(`../skills/config-audit/${file}`, import.meta.url)), 'utf8');
       assert.equal(written, packaged, `${file} drifted`);
     }
   } finally {

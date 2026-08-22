@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import { run } from '../src/index.js';
 import { fingerprint } from '../src/engine.js';
 import { makeProject, cleanup } from './helpers.js';
+import { fileURLToPath } from 'node:url';
 
 const scan = (root, options = {}) => run(root, { includeUserScope: false, ...options });
 const baselineOf = (root) => new Set(scan(root).findings.map(fingerprint));
@@ -53,7 +54,7 @@ test('a baseline survives unrelated lines being added to the file', () => {
 });
 
 test('fingerprints never contain a line number', () => {
-  const root = new URL('./fixtures/messy', import.meta.url).pathname;
+  const root = fileURLToPath(new URL('./fixtures/messy', import.meta.url));
   for (const finding of scan(root).findings) {
     const anchor = fingerprint(finding).split('::')[2];
     assert.notEqual(anchor, String(finding.line),
@@ -62,7 +63,7 @@ test('fingerprints never contain a line number', () => {
 });
 
 test('fingerprints are stable across repeated runs', () => {
-  const root = new URL('./fixtures/messy', import.meta.url).pathname;
+  const root = fileURLToPath(new URL('./fixtures/messy', import.meta.url));
   const first = scan(root).findings.map(fingerprint);
   const second = scan(root).findings.map(fingerprint);
   assert.deepEqual(first, second);

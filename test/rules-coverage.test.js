@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { run } from '../src/index.js';
 import { allRules } from '../src/rules/index.js';
 import { makeProject, cleanup, findingsFor } from './helpers.js';
+import { fileURLToPath } from 'node:url';
 
 const scan = (root, options = {}) => run(root, { includeUserScope: false, ...options });
 
@@ -199,10 +200,10 @@ test('every shipped rule is exercised by the test suite', async () => {
   // Guards against a rule being added with no test: each rule id must appear in
   // at least one test file, which is what keeps the catalogue honest.
   const { readdirSync, readFileSync } = await import('node:fs');
-  const dir = new URL('.', import.meta.url).pathname;
+  const dir = fileURLToPath(new URL('.', import.meta.url));
   const corpus = readdirSync(dir)
     .filter((name) => name.endsWith('.test.js'))
-    .map((name) => readFileSync(new URL(name, import.meta.url).pathname, 'utf8'))
+    .map((name) => readFileSync(fileURLToPath(new URL(name, import.meta.url)), 'utf8'))
     .join('\n');
   const untested = allRules.filter((rule) => !corpus.includes(rule.id)).map((rule) => rule.id);
   assert.deepEqual(untested, [], `rules with no test: ${untested.join(', ')}`);

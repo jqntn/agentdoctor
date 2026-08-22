@@ -3,11 +3,12 @@ import assert from 'node:assert/strict';
 import { execFileSync, execSync } from 'node:child_process';
 import { readFileSync, existsSync, unlinkSync } from 'node:fs';
 import { join } from 'node:path';
-import { makeProject, cleanup } from './helpers.js';
+import { makeProject, cleanup, posixOnly } from './helpers.js';
+import { fileURLToPath } from 'node:url';
 
-const CLI = new URL('../bin/agentdoctor.js', import.meta.url).pathname;
-const MESSY = new URL('./fixtures/messy', import.meta.url).pathname;
-const CLEAN = new URL('./fixtures/clean', import.meta.url).pathname;
+const CLI = fileURLToPath(new URL('../bin/agentdoctor.js', import.meta.url));
+const MESSY = fileURLToPath(new URL('./fixtures/messy', import.meta.url));
+const CLEAN = fileURLToPath(new URL('./fixtures/clean', import.meta.url));
 
 /** Runs the CLI and captures stdout plus the exit code. */
 function cli(args, options = {}) {
@@ -22,7 +23,7 @@ function cli(args, options = {}) {
   }
 }
 
-test('piping into a command that closes early does not crash', () => {
+test('piping into a command that closes early does not crash', posixOnly, () => {
   // Regression: `agentdoctor --list-rules | head` used to surface EPIPE as an
   // unhandled error with a Node stack trace.
   const output = execSync(`${process.execPath} ${CLI} --list-rules 2>&1 | head -3`, {
@@ -32,7 +33,7 @@ test('piping into a command that closes early does not crash', () => {
   assert.equal(output.trim().split('\n').length, 3);
 });
 
-test('a full report also survives a closed pipe', () => {
+test('a full report also survives a closed pipe', posixOnly, () => {
   const output = execSync(`NO_COLOR=1 ${process.execPath} ${CLI} ${MESSY} --no-user 2>&1 | head -4`, {
     encoding: 'utf8', shell: '/bin/bash',
   });

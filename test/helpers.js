@@ -25,6 +25,13 @@ export function withSettings(settings, extra = {}) {
   return makeProject({ '.claude/settings.json': settings, ...extra });
 }
 
+/**
+ * POSIX file modes and /bin/sh do not exist on Windows, so the handful of
+ * tests that depend on them are skipped there rather than asserted loosely.
+ */
+export const isWindows = process.platform === 'win32';
+export const posixOnly = isWindows ? { skip: 'POSIX-only behaviour' } : {};
+
 /** Rule ids present in a run result. */
 export const firedRules = (result) => new Set(result.findings.map((f) => f.ruleId));
 

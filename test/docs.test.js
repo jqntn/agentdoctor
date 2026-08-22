@@ -3,8 +3,9 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { allRules, CATEGORIES } from '../src/rules/index.js';
+import { fileURLToPath } from 'node:url';
 
-const read = (name) => readFileSync(new URL(`../${name}`, import.meta.url).pathname, 'utf8');
+const read = (name) => readFileSync(fileURLToPath(new URL(`../${name}`, import.meta.url)), 'utf8');
 
 test('the README rule counts match the catalogue', () => {
   // Marketing copy that drifts from the code is how a tool loses trust on the
@@ -51,7 +52,7 @@ test('no source file points at a URL outside links.js', async () => {
   // that links nowhere, so URLs live in exactly one file.
   const { readdirSync, statSync } = await import('node:fs');
   const { join } = await import('node:path');
-  const root = new URL('../src', import.meta.url).pathname;
+  const root = fileURLToPath(new URL('../src', import.meta.url));
   const offenders = [];
   const walk = (dir) => {
     for (const entry of readdirSync(dir)) {
@@ -75,7 +76,7 @@ test('every tracked source file is plain text', async () => {
   // which made grep, git diff and most editors treat the file as binary - so
   // a contributor searching the repo would silently miss it.
   const { execFileSync } = await import('node:child_process');
-  const root = new URL('..', import.meta.url).pathname;
+  const root = fileURLToPath(new URL('..', import.meta.url));
   const tracked = execFileSync('git', ['-C', root, 'ls-files'], { encoding: 'utf8' })
     .split('\n').filter(Boolean)
     .filter((f) => /\.(js|mjs|json|md|css|yml|svg|txt|sh)$/.test(f));
@@ -97,7 +98,7 @@ test('the whole git history follows Conventional Commits', async () => {
   // The convention is only worth having if it is enforced; CI checks PR
   // commits, and this checks the history that is already here.
   const { execFileSync } = await import('node:child_process');
-  const root = new URL('..', import.meta.url).pathname;
+  const root = fileURLToPath(new URL('..', import.meta.url));
   const { validate } = await import('../tools/check-commits.mjs');
   const raw = execFileSync('git', ['-C', root, 'log', '--format=%H%x00%B%x1e'], { encoding: 'utf8' });
   const offenders = [];

@@ -2,8 +2,9 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { parseFrontmatter } from '../src/parse.js';
+import { fileURLToPath } from 'node:url';
 
-const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url).pathname, 'utf8');
+const read = (path) => readFileSync(fileURLToPath(new URL(`../${path}`, import.meta.url)), 'utf8');
 
 test('the plugin manifest is valid and version-locked to the package', () => {
   const plugin = JSON.parse(read('.claude-plugin/plugin.json'));
