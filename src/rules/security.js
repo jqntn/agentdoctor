@@ -483,6 +483,10 @@ export const securityRules = [
     title: 'Agent config writable by other users',
     help: 'Run "chmod go-w" on the file. Any user who can write your agent config can add a hook, and hooks execute automatically as you.',
     check({ files, report }) {
+      // Windows has no POSIX mode bits; Node synthesizes 0666, which would make
+      // this rule fire on every file. File ACLs there are a different model and
+      // outside what this rule can speak to.
+      if (process.platform === 'win32') return;
       // Group-write is only meaningful when the group is shared. Most Linux
       // distributions give each user a private group and a 002 umask, which
       // makes mode 664 the harmless default rather than a finding.
@@ -535,7 +539,9 @@ export const securityRules = [
         // Same ownership logic as security/world-writable-config: group-write
         // only matters when the group is shared. A git checkout under the
         // common umask 002 produces mode 775, so flagging group-write outright
-        // would fire on every cloned repository.
+        // would fire on every cloned repository. And Windows synthesizes 0666
+        // for every file, so the check is meaningless there.
+        if (process.platform === 'win32') return;
         const stats = statSync(resolved);
         const ownGid = typeof process.getgid === 'function' ? process.getgid() : null;
         const otherWritable = (stats.mode & 0o002) !== 0;

@@ -223,9 +223,13 @@ function findMemoryFiles(root, depth = 0) {
 }
 
 function displayPath(path, root, home) {
-  if (path.startsWith(root + sep)) return relative(root, path);
-  if (path.startsWith(home + sep)) return '~' + sep + relative(home, path);
-  return path;
+  // Always forward slashes: display paths end up in JSON, in SARIF (whose
+  // artifact URIs must be URI-form) and in baseline fingerprints, so a
+  // baseline written on Windows has to match one written on Linux.
+  const toPosix = (value) => value.split(sep).join('/');
+  if (path.startsWith(root + sep)) return toPosix(relative(root, path));
+  if (path.startsWith(home + sep)) return `~/${toPosix(relative(home, path))}`;
+  return toPosix(path);
 }
 
 export { NEVER_READ, SKIP_DIRS };

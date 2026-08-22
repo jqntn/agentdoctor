@@ -61,6 +61,16 @@ server definitions, and the `CLAUDE.md`/`AGENTS.md` memory-file convention. The 
 harness-agnostic — discovery is the only layer that knows file layouts — so support for other
 agent config formats is an issue away.
 
+## Does it work on Windows?
+
+Yes, with one deliberate gap: the two rules that inspect file permissions
+(`security/world-writable-config` and the permission half of
+`security/hook-script-not-executable`) do nothing on Windows. Node synthesizes POSIX mode bits
+there — every file reports `0666` — so the check would fire on everything while telling you
+nothing. Windows ACLs are a different model than this rule can speak to. Every other rule
+behaves identically across Linux, macOS and Windows, and paths in output always use forward
+slashes so a baseline recorded on one platform matches on another.
+
 ## Why Node 20+? Why zero dependencies?
 
 Node 20 is the oldest LTS with everything the tool needs built in. Zero dependencies is a
