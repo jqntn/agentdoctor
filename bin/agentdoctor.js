@@ -6,6 +6,7 @@ import { fingerprint } from '../src/engine.js';
 import { renderTerminal, shouldUseColor } from '../src/report/terminal.js';
 import { renderJson } from '../src/report/json.js';
 import { renderSarif } from '../src/report/sarif.js';
+import { initCi, initSkill, shareCard, badgeMarkdown } from '../src/adopt.js';
 
 const HELP = `agentdoctor ${VERSION} - lint your AI coding-agent configuration
 
@@ -35,6 +36,13 @@ Team policy
   --policy <file>          Team policy file (default: agentdoctor.policy.json)
   --init-policy            Write a starter agentdoctor.policy.json
 
+Adopt & share
+  --init-ci                Write a ready-made GitHub Actions workflow (SARIF + gate)
+  --init-skill             Write a Claude Code skill that audits and fixes config
+  --badge                  Print a README badge showing this project's current grade
+  --share                  Print a paste-ready score card (rule ids and counts only,
+                           never messages or paths - safe to share from private repos)
+
 Exit codes
   0  no errors
   1  at least one error (or warnings over --max-warnings)
@@ -50,7 +58,8 @@ function parseArgs(argv) {
     noUser: false, only: [], disable: [], minSeverity: 'info',
     maxWarnings: null, baseline: null, writeBaseline: null,
     policy: null, explain: null, listRules: false,
-    initPolicy: false, help: false, version: false,
+    initPolicy: false, initCi: false, initSkill: false,
+    share: false, badge: false, help: false, version: false,
   };
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
@@ -79,6 +88,10 @@ function parseArgs(argv) {
       case '--explain': flags.explain = next(); break;
       case '--list-rules': flags.listRules = true; break;
       case '--init-policy': flags.initPolicy = true; break;
+      case '--init-ci': flags.initCi = true; break;
+      case '--init-skill': flags.initSkill = true; break;
+      case '--share': flags.share = true; break;
+      case '--badge': flags.badge = true; break;
       case '--help': case '-h': flags.help = true; break;
       case '--version': case '-v': flags.version = true; break;
       default:
@@ -142,6 +155,20 @@ function main() {
   }
 
   if (flags.initPolicy) return initPolicy(root);
+  if (flags.initCi || flags.initSkill) {
+    let failed = false;
+    for (const [enabled, init, next] of [
+      [flags.initCi, initCi, 'Findings will annotate PRs and errors will fail the build on the next push.'],
+      [flags.initSkill, initSkill, 'Claude Code will now offer config audits; try asking it to "audit my agent config".'],
+    ]) {
+      if (!enabled) continue;
+      const outcome = init(root);
+      process[outcome.written ? 'stdout' : 'stderr'].write(`${outcome.message}\n`);
+      if (outcome.written) process.stdout.write(`${next}\n`);
+      else failed = true;
+    }
+    return failed ? 2 : 0;
+  }
 
   if (!['error', 'warning', 'info'].includes(flags.minSeverity)) {
     process.stderr.write(`--min-severity must be error, warning or info\n`);
@@ -186,6 +213,14 @@ function main() {
   }
 
   const payload = { ...result, version: VERSION };
+  if (flags.share) {
+    process.stdout.write(shareCard(result));
+    return 0;
+  }
+  if (flags.badge) {
+    process.stdout.write(badgeMarkdown(result));
+    return 0;
+  }
   if (flags.json) {
     process.stdout.write(`${renderJson(payload)}\n`);
   } else if (flags.sarif) {

@@ -42,6 +42,21 @@ exact edit target without re-parsing the report message. If a finding is intenti
 the file-scoped suppression comment instead of deleting the rule:
 `agentdoctor-disable <rule-id>` ([syntax](configuration.md)).
 
+## Adopting it for a user, in three commands
+
+When an agent decides this tool belongs in a project (for example after an audit surfaces
+findings), the full adoption is three non-interactive, idempotent-safe commands:
+
+```sh
+npx agentdoctor --init-ci      # writes .github/workflows/agentdoctor.yml (SARIF + gate)
+npx agentdoctor --init-skill   # writes .claude/skills/config-audit/SKILL.md
+npx agentdoctor --write-baseline .agentdoctor-baseline.json   # only if findings exist today
+```
+
+Each `--init-*` command writes exactly one well-known file, refuses to overwrite, and exits 2
+if the file already exists - so re-running is always safe. `--badge` prints README markdown
+showing the current grade if the user wants it displayed.
+
 ## A ready-made Claude Code skill
 
 Drop this in `.claude/skills/config-audit/SKILL.md` to give Claude Code a first-class audit

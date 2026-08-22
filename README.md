@@ -63,7 +63,7 @@ CLAUDE.md
                  (~$25/month at 3,300 requests, assuming it stays prompt-cached).
                  cost/memory-file-too-large
 
-Summary  3 errors, 1 warning  - 72 rules in 41ms
+Summary  Grade F  3 errors, 1 warning  - 72 rules in 41ms
 ```
 
 Zero dependencies. No network calls. Credential files are never opened. MIT — all of it.
@@ -118,6 +118,21 @@ agentdoctor --init-policy
 `requiredDeny`, `forbiddenAllow`, `allowedMcpServers`, `requiredHooks`, `maxMemoryTokens`,
 `forbiddenPermissionModes`, plus drift detection when local settings quietly widen the
 committed permission set. [Policy guide](docs/policy.md).
+
+## Adopt it in one command
+
+```sh
+npx agentdoctor --init-ci      # GitHub Actions: SARIF annotations on PRs + error gate
+npx agentdoctor --init-skill   # Claude Code skill: findings -> fixes, automatically
+npx agentdoctor --badge        # README badge with your current grade
+npx agentdoctor --share        # paste-ready score card (rule ids + counts only)
+```
+
+Every audit ends in a grade - `A+` down to `F`, formula stated in the docs. The badge and the
+share card contain rule ids and counts only, never messages, paths, or snippets, so they are
+safe to post from private repos.
+
+[![agentdoctor: A+](https://img.shields.io/badge/agentdoctor-A%2B-34D399)](https://REPLACE_ME.github.io/agentdoctor/)
 
 ## CI
 

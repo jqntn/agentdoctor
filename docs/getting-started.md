@@ -66,6 +66,14 @@ instead, and the rule id. Every rule id works with `--explain`:
 agentdoctor --explain security/unrestricted-bash
 ```
 
+## The grade
+
+Every report ends with a health grade - `A+` (zero findings), `A` (info only), `B`/`C`
+(warnings), `D`/`F` (errors). It is computed from what is actionable today, so fixing or
+deliberately suppressing findings raises it. `agentdoctor --share` prints a paste-ready
+score card (rule ids and counts only - safe to share from private repos), and
+`agentdoctor --badge` emits README markdown for it.
+
 ## Severities
 
 | Severity | Meaning |

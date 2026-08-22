@@ -21,6 +21,7 @@ agentdoctor --no-user --json
   "skippedFiles": ["/home/u/.claude/.credentials.json"],
   "rulesRun": ["correctness/invalid-json", "..."],
   "suppressed": 0,
+  "grade": "D",
   "summary": { "error": 2, "warning": 1, "info": 0 },
   "findings": [
     {
@@ -42,6 +43,8 @@ agentdoctor --no-user --json
 
 Field notes:
 
+- `grade` is the health grade, computed from the post-filter findings: `A+` zero findings,
+  `A` info only, `B` 1-2 warnings, `C` 3+ warnings, `D` 1-2 errors, `F` 3+ errors.
 - `version` is the format version. Additions are the only change ever made to shape `1`;
   removals or renames would bump it.
 - `findings` is sorted: severity first (`error` > `warning` > `info`), then file, then line.
@@ -82,8 +85,8 @@ then line. Color respects `NO_COLOR`, `FORCE_COLOR`, and TTY detection, and degr
 text in pipes. Every finding ends with its rule id so `--explain` is always one copy-paste
 away.
 
-The summary line always includes: counts by severity, rules run, elapsed time, suppressed
-findings (baseline + inline), and how many credential files were skipped unread.
+The summary line always includes: the grade, counts by severity, rules run, elapsed time,
+suppressed findings (baseline + inline), and how many credential files were skipped unread.
 
 ## Exit codes (all formats)
 
