@@ -27,7 +27,11 @@ jobs:
         with:
           node-version: 22
       - run: node tools/build-site.mjs
+      # enablement: true so a fresh clone or fork provisions Pages itself
+      # instead of failing with "Get Pages site failed".
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
