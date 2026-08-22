@@ -105,12 +105,54 @@ test('the installed skill is byte-identical to the packaged one, so the two cann
   }
 });
 
+test('--init-agents creates, appends, and refuses to duplicate', () => {
+  // Fresh project: creates the file.
+  const fresh = makeProject({ 'README.md': 'x' });
+  try {
+    assert.equal(cli(['--init-agents', fresh]).code, 0);
+    const created = readFileSync(join(fresh, 'AGENTS.md'), 'utf8');
+    assert.match(created, /<!-- agentdoctor:start -->/);
+    assert.match(created, /npx agentdoctor \. --no-user --json/);
+    assert.match(created, /Never delete or\s+weaken/);
+    assert.equal(cli(['--init-agents', fresh]).code, 2, 'must not duplicate the section');
+  } finally {
+    cleanup(fresh);
+  }
+
+  // Existing AGENTS.md: appends without touching prior content.
+  const existing = makeProject({ 'AGENTS.md': '# My project\n\nUse pnpm, not npm.\n' });
+  try {
+    assert.equal(cli(['--init-agents', existing]).code, 0);
+    const appended = readFileSync(join(existing, 'AGENTS.md'), 'utf8');
+    assert.match(appended, /Use pnpm, not npm\./);
+    assert.ok(appended.indexOf('Use pnpm') < appended.indexOf('agentdoctor:start'),
+      'existing content must stay first');
+    assert.match(appended, /<!-- agentdoctor:end -->/);
+  } finally {
+    cleanup(existing);
+  }
+});
+
+test('the AGENTS.md section stays small enough to live in always-on context', () => {
+  // The section rides along in every session for AGENTS.md-reading tools, so
+  // it must never grow into the memory bloat our own cost rules flag.
+  const root = makeProject({ 'README.md': 'x' });
+  try {
+    cli(['--init-agents', root]);
+    const content = readFileSync(join(root, 'AGENTS.md'), 'utf8');
+    assert.ok(content.length < 1500, `AGENTS.md section is ${content.length} chars; keep it lean`);
+  } finally {
+    cleanup(root);
+  }
+});
+
 test('a project adopted via --init-ci and --init-skill still grades A+ itself', () => {
   // The files the tool writes must never trigger its own rules.
   const root = makeProject({ 'README.md': 'x' });
   try {
     cli(['--init-ci', root]);
     cli(['--init-skill', root]);
+    cli(['--init-agents', root]);
     const json = JSON.parse(cli([root, '--no-user', '--json']).stdout);
     assert.deepEqual(json.findings, [], `self-inflicted findings: ${json.findings.map((f) => f.ruleId).join(', ')}`);
   } finally {

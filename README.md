@@ -124,6 +124,7 @@ committed permission set. [Policy guide](docs/policy.md).
 ```sh
 npx agentdoctor --init-ci      # GitHub Actions: SARIF annotations on PRs + error gate
 npx agentdoctor --init-skill   # Claude Code skill: findings -> fixes, automatically
+npx agentdoctor --init-agents  # AGENTS.md section: same loop for Codex, Cursor, Gemini CLI
 npx agentdoctor --badge        # README badge with your current grade
 npx agentdoctor --share        # paste-ready score card (rule ids + counts only)
 ```
