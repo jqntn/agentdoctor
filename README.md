@@ -1,13 +1,13 @@
 <div align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
-    <img src="assets/logo-light.svg" alt="agentdoctor" width="420">
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/jqntn/agentdoctor/main/assets/logo-dark.svg">
+    <img src="https://raw.githubusercontent.com/jqntn/agentdoctor/main/assets/logo-light.svg" alt="agentdoctor" width="420">
   </picture>
 
   <p><strong>Lint your AI coding agent's configuration before it bites.</strong></p>
 
   <p>
-    <a href="https://github.com/REPLACE_ME/agentdoctor/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/REPLACE_ME/agentdoctor/actions/workflows/ci.yml/badge.svg"></a>
+    <a href="https://github.com/jqntn/agentdoctor/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/jqntn/agentdoctor/actions/workflows/ci.yml/badge.svg"></a>
     <a href="https://www.npmjs.com/package/agentdoctor"><img alt="npm" src="https://img.shields.io/npm/v/agentdoctor"></a>
     <img alt="zero dependencies" src="https://img.shields.io/badge/dependencies-0-34D399">
     <img alt="node >=20" src="https://img.shields.io/badge/node-%3E%3D20-64748B">
@@ -15,7 +15,7 @@
   </p>
 
   <p>
-    <a href="https://REPLACE_ME.github.io/agentdoctor/">Website</a> ·
+    <a href="https://jqntn.github.io/agentdoctor/">Website</a> ·
     <a href="docs/getting-started.md">Getting started</a> ·
     <a href="docs/rules.md">Rule reference</a> ·
     <a href="docs/ci.md">CI setup</a> ·
@@ -133,7 +133,7 @@ Every audit ends in a grade - `A+` down to `F`, formula stated in the docs. The 
 share card contain rule ids and counts only, never messages, paths, or snippets, so they are
 safe to post from private repos.
 
-[![agentdoctor: A+](https://img.shields.io/badge/agentdoctor-A%2B-34D399)](https://REPLACE_ME.github.io/agentdoctor/)
+[![agentdoctor: A+](https://img.shields.io/badge/agentdoctor-A%2B-34D399)](https://jqntn.github.io/agentdoctor/)
 
 ## CI
 
@@ -168,7 +168,7 @@ The repo is also a **Claude Code plugin**: it ships the
 an `/agentdoctor:audit` command. Install it any of three ways:
 
 ```
-/plugin marketplace add REPLACE_ME/agentdoctor    # in Claude Code, then: /plugin install agentdoctor
+/plugin marketplace add jqntn/agentdoctor    # in Claude Code, then: /plugin install agentdoctor
 npx agentdoctor --init-skill                      # copies the skill into this project
 cp -r node_modules/agentdoctor/skills/config-audit .claude/skills/   # manual
 ```

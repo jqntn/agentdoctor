@@ -2,7 +2,7 @@
   "name": "agentdoctor",
   "owner": {
     "name": "the agentdoctor authors",
-    "url": "https://github.com/REPLACE_ME/agentdoctor"
+    "url": "https://github.com/jqntn/agentdoctor"
   },
   "plugins": [
     {

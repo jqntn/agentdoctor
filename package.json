@@ -28,8 +28,17 @@
     "security",
     "static-analysis"
   ],
-  "type": "module",
   "license": "MIT",
+  "author": "Julien QUENTIN <jqntn88@gmail.com>",
+  "homepage": "https://jqntn.github.io/agentdoctor/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jqntn/agentdoctor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jqntn/agentdoctor/issues"
+  },
+  "type": "module",
   "engines": {
     "node": ">=20"
   },

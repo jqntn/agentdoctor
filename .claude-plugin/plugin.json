@@ -4,10 +4,10 @@
   "version": "0.1.0",
   "author": {
     "name": "the agentdoctor authors",
-    "url": "https://github.com/REPLACE_ME/agentdoctor"
+    "url": "https://github.com/jqntn/agentdoctor"
   },
-  "homepage": "https://REPLACE_ME.github.io/agentdoctor/",
-  "repository": "https://github.com/REPLACE_ME/agentdoctor",
+  "homepage": "https://jqntn.github.io/agentdoctor/",
+  "repository": "https://github.com/jqntn/agentdoctor",
   "license": "MIT",
   "keywords": ["lint", "audit", "security", "agent-config", "mcp", "hooks", "permissions"]
 }
