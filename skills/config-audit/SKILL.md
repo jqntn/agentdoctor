@@ -15,6 +15,12 @@ is safe to run unattended in any project.
 npx agentdoctor . --no-user --json
 ```
 
+Nothing is installed by this skill itself: `npx` uses the project's own `agentdoctor` if one
+is in `node_modules`, and otherwise fetches it on first use (then caches it). If the user
+wants it permanent and versioned, offer `npm install -D agentdoctor`; if `npx` cannot fetch
+(offline/registry-blocked environment) and there is no local install, say so and stop rather
+than improvising an audit by hand.
+
 Exit codes: `0` clean, `1` findings with severity error exist, `2` usage error. **Exit 1 is a
 successful audit** — valid JSON is still on stdout; only exit 2 means the run itself failed.
 

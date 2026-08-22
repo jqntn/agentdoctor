@@ -7,7 +7,7 @@
  * lose people (and agents) - these close that gap in a single action that is
  * safe to run unattended.
  */
-import { existsSync, writeFileSync, mkdirSync, cpSync } from 'node:fs';
+import { existsSync, writeFileSync, readFileSync, mkdirSync, cpSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { computeGrade, GRADE_COLORS } from './grade.js';
@@ -73,6 +73,52 @@ function writeOnce(root, relative, contents) {
 
 export function initCi(root) {
   return writeOnce(root, CI_WORKFLOW_PATH, CI_WORKFLOW);
+}
+
+export const AGENTS_PATH = 'AGENTS.md';
+const AGENTS_MARKER_START = '<!-- agentdoctor:start -->';
+const AGENTS_MARKER_END = '<!-- agentdoctor:end -->';
+
+/**
+ * The section is deliberately short: AGENTS.md rides along in every session's
+ * context for the agents that read it, so this must not become the kind of
+ * memory bloat agentdoctor's own cost rules exist to flag.
+ */
+const AGENTS_SECTION = `${AGENTS_MARKER_START}
+## Agent configuration hygiene (agentdoctor)
+
+After editing any agent config (.claude/ settings, hooks, permissions, .mcp.json, skills,
+subagents, CLAUDE.md/AGENTS.md), audit it:
+
+\`\`\`sh
+npx agentdoctor . --no-user --json
+\`\`\`
+
+Exit 1 means findings exist (the JSON on stdout is still valid); exit 2 means the run itself
+failed. Findings arrive most-severe-first; fix each by editing \`file\` at \`line\` as its
+\`help\` field describes (\`configPath\` names the exact key), then verify with
+\`npx agentdoctor . --no-user --quiet\` (exit 0 = clean). Suppress an intentional finding with
+an \`agentdoctor-disable <rule-id>\` comment in that file and state why. Never delete or
+weaken a \`deny\` rule, never widen an \`allow\` rule, never echo unredacted secrets.
+${AGENTS_MARKER_END}`;
+
+/**
+ * Installs the audit instructions where Codex, Cursor, Gemini CLI, Jules and
+ * every other AGENTS.md-reading tool will see them. Creates the file if
+ * missing, appends if present, refuses if the marker already exists.
+ */
+export function initAgents(root) {
+  const target = join(root, AGENTS_PATH);
+  if (existsSync(target)) {
+    const current = readFileSync(target, 'utf8');
+    if (current.includes(AGENTS_MARKER_START)) {
+      return { written: false, path: AGENTS_PATH, message: `${AGENTS_PATH} already has an agentdoctor section; not duplicating it.` };
+    }
+    writeFileSync(target, `${current.replace(/\n*$/, '')}\n\n${AGENTS_SECTION}\n`);
+    return { written: true, path: AGENTS_PATH, message: `Appended the agentdoctor section to ${AGENTS_PATH}` };
+  }
+  writeFileSync(target, `# AGENTS.md\n\n${AGENTS_SECTION}\n`);
+  return { written: true, path: AGENTS_PATH, message: `Wrote ${AGENTS_PATH} with the agentdoctor section` };
 }
 
 export function initSkill(root) {

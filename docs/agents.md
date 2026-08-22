@@ -57,6 +57,40 @@ Each `--init-*` command writes exactly one well-known file, refuses to overwrite
 if the file already exists - so re-running is always safe. `--badge` prints README markdown
 showing the current grade if the user wants it displayed.
 
+## Works with every coding agent
+
+The CLI contract above is vendor-neutral - plain commands, JSON out, exit codes - so any
+agent that can run a shell command can use agentdoctor. What differs per tool is where the
+*instructions* live:
+
+| Agent | Mechanism | Install |
+|---|---|---|
+| Claude Code | Skill + plugin (`/agentdoctor:audit`) | `/plugin marketplace add REPLACE_ME/agentdoctor` or `npx agentdoctor --init-skill` |
+| OpenAI Codex | `AGENTS.md` | `npx agentdoctor --init-agents` |
+| Cursor | `AGENTS.md` | `npx agentdoctor --init-agents` |
+| Gemini CLI / Jules | `AGENTS.md` | `npx agentdoctor --init-agents` |
+| Anything else | `AGENTS.md`, or just the CLI contract | `npx agentdoctor --init-agents` |
+
+`--init-agents` writes a short marked section (`<!-- agentdoctor:start -->` ...
+`<!-- agentdoctor:end -->`) into `AGENTS.md` - creating the file if absent, appending if
+present, refusing if the section already exists - telling the agent to audit after any config
+edit and how to run the fix loop. It is deliberately ~15 lines: AGENTS.md is always-on
+context for these tools, and bloating it is exactly what agentdoctor's cost rules exist to
+prevent.
+
+Note the skill and the AGENTS.md section install *instructions*, not the binary: both invoke
+`npx agentdoctor`, which prefers a project-local install and otherwise fetches on demand. Pin
+it permanently with `npm install -D agentdoctor`.
+
+For Codex specifically, a reusable custom prompt is one copy away (user-scope, so it works
+across projects):
+
+```sh
+mkdir -p ~/.codex/prompts
+npx agentdoctor --init-agents   # project instructions
+cp node_modules/agentdoctor/skills/config-audit/SKILL.md ~/.codex/prompts/audit-config.md   # optional /audit-config
+```
+
 ## The standalone skill and plugin
 
 The canonical skill lives at [`skills/config-audit/`](https://github.com/REPLACE_ME/agentdoctor/tree/main/skills/config-audit)

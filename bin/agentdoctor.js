@@ -6,7 +6,7 @@ import { fingerprint } from '../src/engine.js';
 import { renderTerminal, shouldUseColor } from '../src/report/terminal.js';
 import { renderJson } from '../src/report/json.js';
 import { renderSarif } from '../src/report/sarif.js';
-import { initCi, initSkill, shareCard, badgeMarkdown } from '../src/adopt.js';
+import { initCi, initSkill, initAgents, shareCard, badgeMarkdown } from '../src/adopt.js';
 
 const HELP = `agentdoctor ${VERSION} - lint your AI coding-agent configuration
 
@@ -39,6 +39,8 @@ Team policy
 Adopt & share
   --init-ci                Write a ready-made GitHub Actions workflow (SARIF + gate)
   --init-skill             Write a Claude Code skill that audits and fixes config
+  --init-agents            Add an audit section to AGENTS.md (Codex, Cursor, Gemini CLI,
+                           and every other tool that reads it)
   --badge                  Print a README badge showing this project's current grade
   --share                  Print a paste-ready score card (rule ids and counts only,
                            never messages or paths - safe to share from private repos)
@@ -58,7 +60,7 @@ function parseArgs(argv) {
     noUser: false, only: [], disable: [], minSeverity: 'info',
     maxWarnings: null, baseline: null, writeBaseline: null,
     policy: null, explain: null, listRules: false,
-    initPolicy: false, initCi: false, initSkill: false,
+    initPolicy: false, initCi: false, initSkill: false, initAgents: false,
     share: false, badge: false, help: false, version: false,
   };
   for (let i = 0; i < argv.length; i += 1) {
@@ -90,6 +92,7 @@ function parseArgs(argv) {
       case '--init-policy': flags.initPolicy = true; break;
       case '--init-ci': flags.initCi = true; break;
       case '--init-skill': flags.initSkill = true; break;
+      case '--init-agents': flags.initAgents = true; break;
       case '--share': flags.share = true; break;
       case '--badge': flags.badge = true; break;
       case '--help': case '-h': flags.help = true; break;
@@ -155,11 +158,12 @@ function main() {
   }
 
   if (flags.initPolicy) return initPolicy(root);
-  if (flags.initCi || flags.initSkill) {
+  if (flags.initCi || flags.initSkill || flags.initAgents) {
     let failed = false;
     for (const [enabled, init, next] of [
       [flags.initCi, initCi, 'Findings will annotate PRs and errors will fail the build on the next push.'],
       [flags.initSkill, initSkill, 'Claude Code will now offer config audits; try asking it to "audit my agent config".'],
+      [flags.initAgents, initAgents, 'Codex, Cursor, Gemini CLI and other AGENTS.md readers will now audit config after editing it.'],
     ]) {
       if (!enabled) continue;
       const outcome = init(root);
