@@ -1,0 +1,22 @@
+name: Rule proposal
+description: A failure mode agentdoctor should catch.
+labels: [rule-proposal]
+body:
+  - type: textarea
+    id: failure
+    attributes:
+      label: The failure mode
+      description: What goes wrong, and what makes it silent or dangerous.
+    validations: { required: true }
+  - type: textarea
+    id: example
+    attributes:
+      label: Config that should be flagged
+      render: json
+    validations: { required: true }
+  - type: textarea
+    id: legit
+    attributes:
+      label: Similar config that must NOT be flagged
+      description: The false-positive boundary. This is the hard part of every rule.
+    validations: { required: true }

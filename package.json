@@ -1,0 +1,53 @@
+{
+  "name": "agentdoctor",
+  "version": "0.1.0",
+  "description": "Lint and audit your AI coding-agent configuration: permissions, hooks, MCP servers, skills, subagents and CLAUDE.md. Catches insecure permission rules, broken hooks and context bloat before they bite. Zero dependencies.",
+  "keywords": [
+    "claude-code",
+    "ai-agent",
+    "agent",
+    "lint",
+    "linter",
+    "audit",
+    "security",
+    "mcp",
+    "model-context-protocol",
+    "hooks",
+    "permissions",
+    "claude",
+    "devtools",
+    "cli",
+    "static-analysis",
+    "sarif",
+    "ci"
+  ],
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "agentdoctor": "bin/agentdoctor.js"
+  },
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./rules": "./src/rules/index.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE",
+    "docs",
+    "schemas"
+  ],
+  "scripts": {
+    "test": "node --test",
+    "selfcheck": "node bin/agentdoctor.js --version",
+    "test:coverage": "node --test --experimental-test-coverage",
+    "docs": "node tools/gen-docs.mjs && node tools/build-site.mjs"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

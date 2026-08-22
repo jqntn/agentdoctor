@@ -1,0 +1,29 @@
+name: False positive
+description: A rule fired on legitimate config. We treat these as more severe than missed findings.
+labels: [false-positive]
+body:
+  - type: input
+    id: rule
+    attributes:
+      label: Rule id
+      placeholder: security/hook-unpinned-path
+    validations: { required: true }
+  - type: textarea
+    id: config
+    attributes:
+      label: Minimal config that triggers it
+      description: The smallest settings.json / .mcp.json / frontmatter that reproduces the finding. Redact anything private.
+      render: json
+    validations: { required: true }
+  - type: textarea
+    id: why
+    attributes:
+      label: Why this config is legitimate
+      description: What the rule misunderstood about your setup.
+    validations: { required: true }
+  - type: input
+    id: version
+    attributes:
+      label: agentdoctor version
+      placeholder: output of `agentdoctor --version`
+    validations: { required: true }

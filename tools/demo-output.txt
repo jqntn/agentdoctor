@@ -1,0 +1,36 @@
+
+agentdoctor scanned 1 config file in /work/api
+
+.claude/settings.json
+  3:15    error  "Bash(*)" auto-approves every shell command, including ones you have not seen.
+                 | Bash(*)
+                 -> Replace the wildcard with the specific commands you actually want
+                    unattended, e.g. "Bash(npm test:*)" or "Bash(git status)". A blanket allow
+                    means any command the model proposes runs without asking you.
+                 security/unrestricted-bash
+
+  4:14    error  "bash(curl:*)" targets unknown tool "bash". Did you mean "Bash"? This deny rule currently blocks nothing.
+                 | bash(curl:*)
+                 -> Tool names are case-sensitive. A rule naming a tool that does not exist
+                    never matches anything, so a deny rule written this way protects nothing.
+                 correctness/permission-unknown-tool
+
+  7:21    error  "PostToolUsee" is not a hook event. Did you mean "PostToolUse"? As written, this hook never runs.
+                 -> Valid events: PreToolUse, PostToolUse, UserPromptSubmit, Notification, Stop,
+                    SubagentStop, PreCompact, SessionStart, SessionEnd. Events are
+                    case-sensitive and a misspelled one never fires.
+                 correctness/unknown-hook-event
+
+  1       info   No deny rules cover .env, SSH keys or cloud credentials.
+                 -> Add a deny list such as ["Read(./.env*)", "Read(**/.ssh/**)",
+                    "Read(**/*.pem)", "Read(**/.aws/credentials)"]. Deny rules are the only
+                    guardrail that survives an accepted prompt, since they are checked before
+                    anything runs.
+                 security/missing-secret-denies
+
+  2:18    info   This project defines deny rules, but any contributor can still start a session in bypassPermissions mode and skip them.
+                 -> Set permissions.disableBypassPermissionsMode to "disable" in committed
+                    project settings to stop anyone opting out of prompts in this repo.
+                 security/bypass-mode-not-locked
+
+Summary  3 errors, 2 info  - 72 rules in 11ms

@@ -1,0 +1,24 @@
+{
+  "$comment": "agentdoctor team policy. Commit this next to your repo root.",
+  "$wildcards": "A single * is literal. Use ** to mean \"anything here\".",
+  "requiredDeny": [
+    "Read(./.env*)",
+    "Read(**/.ssh/**)",
+    "Read(**/*.pem)",
+    "Read(**/.aws/credentials)"
+  ],
+  "forbiddenAllow": [
+    "Bash(*)",
+    "Bash(:*)",
+    "Bash()",
+    "WebFetch(*)",
+    "Bash(**sudo**)",
+    "Bash(**rm -rf**)"
+  ],
+  "forbiddenPermissionModes": [
+    "bypassPermissions"
+  ],
+  "allowedMcpServers": [],
+  "requiredHooks": [],
+  "maxMemoryTokens": 6000
+}
