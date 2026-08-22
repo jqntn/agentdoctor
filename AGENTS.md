@@ -10,6 +10,7 @@ npm test                     # full suite, node --test, no framework — must be
 node bin/agentdoctor.js .    # self-audit — must exit 0 with zero findings
 node tools/gen-docs.mjs      # regenerate docs/rules.md from the rule catalogue
 node tools/build-site.mjs    # regenerate the site/ directory from docs/ + assets/
+node tools/check-commits.mjs # validate commit messages (Conventional Commits)
 ```
 
 No build step, no transpiler, no lockfile churn: the source is what runs. ES modules, Node 20+.
@@ -56,6 +57,21 @@ commands/audit.md        the /agentdoctor:audit slash command
 3. `node tools/gen-docs.mjs` to regenerate `docs/rules.md`.
 4. Bump the count in README.md (`**N rules**` and the category heading).
 5. `npm test` and `node bin/agentdoctor.js .` both green.
+
+## Commits
+
+[Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/):
+`type(optional-scope): description`, lowercase description, no trailing period, subject under
+72 characters, blank line before any body. Types: `feat`, `fix`, `docs`, `style`, `refactor`,
+`perf`, `test`, `build`, `ci`, `chore`, `revert`. Scopes: `rules`, `engine`, `parse`,
+`report`, `adopt`, `site`, `plugin`, `docs`, `deps`.
+
+Validate before committing - CI rejects non-conforming messages:
+
+```sh
+node tools/check-commits.mjs --install-hook   # once, then git enforces it locally
+node tools/check-commits.mjs HEAD             # check the whole history
+```
 
 ## Style
 

@@ -6,6 +6,19 @@ on:
   pull_request:
 
 jobs:
+  commits:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate commit messages
+        run: node tools/check-commits.mjs origin/${{ github.base_ref }}..HEAD
+
   test:
     runs-on: ${{ matrix.os }}
     strategy:
