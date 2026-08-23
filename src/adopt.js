@@ -54,11 +54,11 @@ jobs:
 export const SKILL_PATH = '.claude/skills/config-audit';
 
 /**
- * The canonical skill ships inside the package at skills/config-audit/ - the
- * same files served by the plugin marketplace - so an installed skill can
- * never drift from the published one.
+ * The canonical skill ships inside the package at plugin/skills/config-audit/ -
+ * the same files the plugin marketplace serves - so a skill installed either
+ * way can never drift from the published one.
  */
-const PACKAGED_SKILL = join(dirname(fileURLToPath(import.meta.url)), '..', 'skills', 'config-audit');
+const PACKAGED_SKILL = join(dirname(fileURLToPath(import.meta.url)), '..', 'plugin', 'skills', 'config-audit');
 
 /** Writes a file if absent. Returns a { written, path, message } outcome. */
 function writeOnce(root, relative, contents) {

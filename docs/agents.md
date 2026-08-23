@@ -88,12 +88,12 @@ across projects):
 ```sh
 mkdir -p ~/.codex/prompts
 npx @jqntn/agentdoctor --init-agents   # project instructions
-cp node_modules/@jqntn/agentdoctor/skills/config-audit/SKILL.md ~/.codex/prompts/audit-config.md   # optional /audit-config
+cp node_modules/@jqntn/agentdoctor/plugin/skills/config-audit/SKILL.md ~/.codex/prompts/audit-config.md   # optional /audit-config
 ```
 
 ## The standalone skill and plugin
 
-The canonical skill lives at [`skills/config-audit/`](https://github.com/jqntn/agentdoctor/tree/main/skills/config-audit)
+The canonical skill lives at [`plugin/skills/config-audit/`](https://github.com/jqntn/agentdoctor/tree/main/plugin/skills/config-audit)
 in the repo and inside the npm package. It contains the audit -> fix workflow plus
 `references/fix-recipes.md` with per-rule fix patterns, and its `description` frontmatter is
 written to trigger on config-audit requests, edits to `.claude/` files, and "my hook isn't
@@ -105,7 +105,7 @@ Three ways to install it:
 |---|---|---|
 | Claude Code plugin | `/plugin marketplace add jqntn/agentdoctor` then `/plugin install agentdoctor` | everywhere, invokable as `/agentdoctor:config-audit` |
 | CLI | `npx @jqntn/agentdoctor --init-skill` | this project |
-| Manual | `cp -r node_modules/@jqntn/agentdoctor/skills/config-audit .claude/skills/` | anywhere |
+| Manual | `cp -r node_modules/@jqntn/agentdoctor/plugin/skills/config-audit .claude/skills/` | anywhere |
 
 All three install the same files - `--init-skill` copies them out of the package, so the
 installed skill cannot drift from the published one (test-enforced).

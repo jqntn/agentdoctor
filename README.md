@@ -171,13 +171,13 @@ deterministic ordering, redacted secrets safe for model context, pipe-safe outpu
 site serves `llms.txt` and raw markdown.
 
 The repo is also a **Claude Code plugin**: it ships the
-[config-audit skill](skills/config-audit/SKILL.md) (audit -> fix loop, with fix recipes) and
+[config-audit skill](plugin/skills/config-audit/SKILL.md) (audit -> fix loop, with fix recipes) and
 invokable as `/agentdoctor:config-audit`. Install it any of three ways:
 
 ```
 /plugin marketplace add jqntn/agentdoctor    # in Claude Code, then: /plugin install agentdoctor
 npx @jqntn/agentdoctor --init-skill                      # copies the skill into this project
-cp -r node_modules/@jqntn/agentdoctor/skills/config-audit .claude/skills/   # manual
+cp -r node_modules/@jqntn/agentdoctor/plugin/skills/config-audit .claude/skills/   # manual
 ```
 
 [Agent guide](docs/agents.md)

@@ -45,8 +45,10 @@ src/links.js             every outbound URL — nothing else may contain one
 test/fixtures/clean/     a correct project: MUST produce zero findings
 test/fixtures/messy/     a broken project: broad rule coverage
 docs/*.md                source of truth for the site; rules.md is GENERATED
-skills/config-audit/     the canonical standalone skill; --init-skill copies it verbatim
-.claude-plugin/          plugin + marketplace manifests (repo installs as a Claude Code plugin)
+plugin/                  the installable Claude Code plugin: manifest + the canonical
+                         skill, kept in its own directory so installing fetches only
+                         these files. --init-skill copies the skill verbatim
+.claude-plugin/          marketplace manifest, pointing at ./plugin
 ```
 
 ## Invariants (all test-enforced — breaking one fails `npm test`)

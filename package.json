@@ -57,7 +57,7 @@
     "LICENSE",
     "docs",
     "schemas",
-    "skills"
+    "plugin"
   ],
   "scripts": {
     "test": "node --test",

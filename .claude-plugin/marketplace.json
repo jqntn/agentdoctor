@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "agentdoctor",
-      "source": "./",
+      "source": "./plugin",
       "description": "Audit and fix AI coding-agent configuration across security, correctness, cost, hygiene and team policy. Ships the config-audit skill with per-rule fix recipes; the linter runs via npx."
     }
   ]

@@ -98,7 +98,7 @@ test('the installed skill is byte-identical to the packaged one, so the two cann
     cli(['--init-skill', root]);
     for (const file of ['SKILL.md', 'references/fix-recipes.md']) {
       const written = readFileSync(join(root, '.claude/skills/config-audit', file), 'utf8');
-      const packaged = readFileSync(fileURLToPath(new URL(`../skills/config-audit/${file}`, import.meta.url)), 'utf8');
+      const packaged = readFileSync(fileURLToPath(new URL(`../plugin/skills/config-audit/${file}`, import.meta.url)), 'utf8');
       assert.equal(written, packaged, `${file} drifted`);
     }
   } finally {
