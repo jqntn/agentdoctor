@@ -48,9 +48,9 @@ When an agent decides this tool belongs in a project (for example after an audit
 findings), the full adoption is three non-interactive, idempotent-safe commands:
 
 ```sh
-npx agentdoctor --init-ci      # writes .github/workflows/agentdoctor.yml (SARIF + gate)
-npx agentdoctor --init-skill   # writes .claude/skills/config-audit/SKILL.md
-npx agentdoctor --write-baseline .agentdoctor-baseline.json   # only if findings exist today
+npx @jqntn/agentdoctor --init-ci      # writes .github/workflows/agentdoctor.yml (SARIF + gate)
+npx @jqntn/agentdoctor --init-skill   # writes .claude/skills/config-audit/SKILL.md
+npx @jqntn/agentdoctor --write-baseline .agentdoctor-baseline.json   # only if findings exist today
 ```
 
 Each `--init-*` command writes exactly one well-known file, refuses to overwrite, and exits 2
@@ -65,11 +65,11 @@ agent that can run a shell command can use agentdoctor. What differs per tool is
 
 | Agent | Mechanism | Install |
 |---|---|---|
-| Claude Code | Skill + plugin (`/agentdoctor:audit`) | `/plugin marketplace add jqntn/agentdoctor` or `npx agentdoctor --init-skill` |
-| OpenAI Codex | `AGENTS.md` | `npx agentdoctor --init-agents` |
-| Cursor | `AGENTS.md` | `npx agentdoctor --init-agents` |
-| Gemini CLI / Jules | `AGENTS.md` | `npx agentdoctor --init-agents` |
-| Anything else | `AGENTS.md`, or just the CLI contract | `npx agentdoctor --init-agents` |
+| Claude Code | Skill + plugin (`/agentdoctor:audit`) | `/plugin marketplace add jqntn/agentdoctor` or `npx @jqntn/agentdoctor --init-skill` |
+| OpenAI Codex | `AGENTS.md` | `npx @jqntn/agentdoctor --init-agents` |
+| Cursor | `AGENTS.md` | `npx @jqntn/agentdoctor --init-agents` |
+| Gemini CLI / Jules | `AGENTS.md` | `npx @jqntn/agentdoctor --init-agents` |
+| Anything else | `AGENTS.md`, or just the CLI contract | `npx @jqntn/agentdoctor --init-agents` |
 
 `--init-agents` writes a short marked section (`<!-- agentdoctor:start -->` ...
 `<!-- agentdoctor:end -->`) into `AGENTS.md` - creating the file if absent, appending if
@@ -79,16 +79,16 @@ context for these tools, and bloating it is exactly what agentdoctor's cost rule
 prevent.
 
 Note the skill and the AGENTS.md section install *instructions*, not the binary: both invoke
-`npx agentdoctor`, which prefers a project-local install and otherwise fetches on demand. Pin
-it permanently with `npm install -D agentdoctor`.
+`npx @jqntn/agentdoctor`, which prefers a project-local install and otherwise fetches on demand. Pin
+it permanently with `npm install -D @jqntn/agentdoctor`.
 
 For Codex specifically, a reusable custom prompt is one copy away (user-scope, so it works
 across projects):
 
 ```sh
 mkdir -p ~/.codex/prompts
-npx agentdoctor --init-agents   # project instructions
-cp node_modules/agentdoctor/skills/config-audit/SKILL.md ~/.codex/prompts/audit-config.md   # optional /audit-config
+npx @jqntn/agentdoctor --init-agents   # project instructions
+cp node_modules/@jqntn/agentdoctor/skills/config-audit/SKILL.md ~/.codex/prompts/audit-config.md   # optional /audit-config
 ```
 
 ## The standalone skill and plugin
@@ -104,8 +104,8 @@ Three ways to install it:
 | Method | Command | Scope |
 |---|---|---|
 | Claude Code plugin | `/plugin marketplace add jqntn/agentdoctor` then `/plugin install agentdoctor` | everywhere (also adds `/agentdoctor:audit`) |
-| CLI | `npx agentdoctor --init-skill` | this project |
-| Manual | `cp -r node_modules/agentdoctor/skills/config-audit .claude/skills/` | anywhere |
+| CLI | `npx @jqntn/agentdoctor --init-skill` | this project |
+| Manual | `cp -r node_modules/@jqntn/agentdoctor/skills/config-audit .claude/skills/` | anywhere |
 
 All three install the same files - `--init-skill` copies them out of the package, so the
 installed skill cannot drift from the published one (test-enforced).

@@ -163,7 +163,7 @@ gh release create "v${PKG_VERSION}" --title "agentdoctor v${PKG_VERSION}" --note
 First public release.
 
 \`\`\`sh
-npx agentdoctor
+npx @jqntn/agentdoctor
 \`\`\`
 
 A zero-dependency linter for AI coding-agent configuration — permissions, hooks, MCP servers,

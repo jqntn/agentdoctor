@@ -12,12 +12,12 @@ is safe to run unattended in any project.
 ## Run the audit
 
 ```sh
-npx agentdoctor . --no-user --json
+npx @jqntn/agentdoctor . --no-user --json
 ```
 
 Nothing is installed by this skill itself: `npx` uses the project's own `agentdoctor` if one
 is in `node_modules`, and otherwise fetches it on first use (then caches it). If the user
-wants it permanent and versioned, offer `npm install -D agentdoctor`; if `npx` cannot fetch
+wants it permanent and versioned, offer `npm install -D @jqntn/agentdoctor`; if `npx` cannot fetch
 (offline/registry-blocked environment) and there is no local install, say so and stop rather
 than improvising an audit by hand.
 
@@ -50,7 +50,7 @@ For each finding, most severe first:
 Then verify:
 
 ```sh
-npx agentdoctor . --no-user --quiet
+npx @jqntn/agentdoctor . --no-user --quiet
 ```
 
 Exit 0 means clean. Re-run the JSON audit if it is still 1 and continue.
@@ -69,4 +69,4 @@ Exit 0 means clean. Re-run the JSON audit if it is still 1 and continue.
 
 End with: the grade before and after, what you fixed (rule ids), what you suppressed and why,
 and anything needing a human decision. If the user wants to track this in CI or show the
-grade, the one-command options are `npx agentdoctor --init-ci` and `npx agentdoctor --badge`.
+grade, the one-command options are `npx @jqntn/agentdoctor --init-ci` and `npx @jqntn/agentdoctor --badge`.

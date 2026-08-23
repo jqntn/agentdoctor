@@ -3,7 +3,7 @@
  *
  * Each writes exactly one well-known file, refuses to overwrite, and prints
  * what it did plus the next step. They exist because the gap between a
- * drive-by `npx agentdoctor` and a permanent CI check is where most tools
+ * drive-by `npx @jqntn/agentdoctor` and a permanent CI check is where most tools
  * lose people (and agents) - these close that gap in a single action that is
  * safe to run unattended.
  */
@@ -36,7 +36,7 @@ jobs:
           node-version: 22
 
       # Findings annotate the PR diff via code scanning.
-      - run: npx agentdoctor --no-user --sarif > agentdoctor.sarif
+      - run: npx @jqntn/agentdoctor --no-user --sarif > agentdoctor.sarif
         continue-on-error: true
       - uses: github/codeql-action/upload-sarif@v3
         with:
@@ -45,10 +45,10 @@ jobs:
 
       # The actual gate: exit 1 on errors.
       # Adopting on a repo with existing findings? Commit a baseline first:
-      #   npx agentdoctor --no-user --write-baseline .agentdoctor-baseline.json
+      #   npx @jqntn/agentdoctor --no-user --write-baseline .agentdoctor-baseline.json
       # then change the line below to:
-      #   npx agentdoctor --no-user --baseline .agentdoctor-baseline.json --quiet
-      - run: npx agentdoctor --no-user --quiet
+      #   npx @jqntn/agentdoctor --no-user --baseline .agentdoctor-baseline.json --quiet
+      - run: npx @jqntn/agentdoctor --no-user --quiet
 `;
 
 export const SKILL_PATH = '.claude/skills/config-audit';
@@ -91,13 +91,13 @@ After editing any agent config (.claude/ settings, hooks, permissions, .mcp.json
 subagents, CLAUDE.md/AGENTS.md), audit it:
 
 \`\`\`sh
-npx agentdoctor . --no-user --json
+npx @jqntn/agentdoctor . --no-user --json
 \`\`\`
 
 Exit 1 means findings exist (the JSON on stdout is still valid); exit 2 means the run itself
 failed. Findings arrive most-severe-first; fix each by editing \`file\` at \`line\` as its
 \`help\` field describes (\`configPath\` names the exact key), then verify with
-\`npx agentdoctor . --no-user --quiet\` (exit 0 = clean). Suppress an intentional finding with
+\`npx @jqntn/agentdoctor . --no-user --quiet\` (exit 0 = clean). Suppress an intentional finding with
 an \`agentdoctor-disable <rule-id>\` comment in that file and state why. Never delete or
 weaken a \`deny\` rule, never widen an \`allow\` rule, never echo unredacted secrets.
 ${AGENTS_MARKER_END}`;
@@ -160,7 +160,7 @@ export function shareCard(result) {
   if (topRules.length) {
     lines.push('', ...topRules.map((id) => `- \`${id}\``));
   }
-  lines.push('', 'Check your own agent config:', '', '```', 'npx agentdoctor', '```', '', REPO_URL);
+  lines.push('', 'Check your own agent config:', '', '```', 'npx @jqntn/agentdoctor', '```', '', REPO_URL);
   return `${lines.join('\n')}\n`;
 }
 
@@ -172,7 +172,7 @@ export function badgeMarkdown(result) {
   return [
     `[![agentdoctor: ${grade}](${img})](${REPO_URL})`,
     '',
-    '<!-- Keep it honest: regenerate after config changes with `npx agentdoctor --badge`,',
-    '     or let CI gate on the real thing: `npx agentdoctor --init-ci` -->',
+    '<!-- Keep it honest: regenerate after config changes with `npx @jqntn/agentdoctor --badge`,',
+    '     or let CI gate on the real thing: `npx @jqntn/agentdoctor --init-ci` -->',
   ].join('\n') + '\n';
 }

@@ -3,7 +3,7 @@
 agentdoctor is an ES module with no dependencies, so embedding it is one import.
 
 ```js
-import { run } from 'agentdoctor';
+import { run } from '@jqntn/agentdoctor';
 
 const result = run('/path/to/repo', { includeUserScope: false });
 
@@ -68,7 +68,7 @@ All exported from the package root:
 A rule is a plain object; `lint` accepts any array of them.
 
 ```js
-import { discover, lint, allRules, helpers } from 'agentdoctor';
+import { discover, lint, allRules, helpers } from '@jqntn/agentdoctor';
 
 const noOpusInProjects = {
   id: 'org/no-opus-model',
