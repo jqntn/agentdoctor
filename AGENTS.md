@@ -11,7 +11,23 @@ node bin/agentdoctor.js .    # self-audit — must exit 0 with zero findings
 node tools/gen-docs.mjs      # regenerate docs/rules.md from the rule catalogue
 node tools/build-site.mjs    # regenerate the site/ directory from docs/ + assets/
 node tools/check-commits.mjs # validate commit messages (Conventional Commits)
+node tools/gen-gallery.mjs   # regenerate the launch gallery SVGs (measures text to fit)
 ```
+
+Rasterize the gallery for Product Hunt (PNGs are gitignored build artifacts):
+
+```sh
+sudo apt-get install -y librsvg2-bin fonts-dejavu-core
+mkdir -p assets/png
+for f in assets/gallery/*.svg; do rsvg-convert -w 1270 -h 760 "$f" -o "assets/png/$(basename "$f" .svg).png"; done
+rsvg-convert -w 1200 -h 630 assets/og-card.svg -o assets/png/og-card-1200x630.png
+rsvg-convert -w 240 -h 240 assets/mark.svg -o assets/png/thumbnail-240.png
+```
+
+`rsvg-convert` resolves generic `monospace` to DejaVu Sans Mono, which is wider than the
+JetBrains Mono these were designed against - so `gen-gallery.mjs` measures every line against
+DejaVu metrics and **exits non-zero** rather than emitting a card whose text clips. Always
+re-render and look at the PNGs after editing card copy.
 
 No build step, no transpiler, no lockfile churn: the source is what runs. ES modules, Node 20+.
 
