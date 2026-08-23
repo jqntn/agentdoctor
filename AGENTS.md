@@ -87,4 +87,9 @@ node tools/check-commits.mjs HEAD             # check the whole history
 
 `npm test` → `node bin/agentdoctor.js .` → update CHANGELOG.md → bump `version` in
 package.json, `VERSION` in `src/index.js`, AND `.claude-plugin/plugin.json` (tests assert all
-three match) → `npm publish`.
+three match) → tag `vX.Y.Z` → publish a GitHub release.
+
+Publishing to npm is automated: `.github/workflows/publish.yml` fires on a published release
+and authenticates via OIDC trusted publishing, so there is no npm token in this repo and
+nothing to paste. It re-runs the suite, the self-audit and the commit check, and refuses to
+publish if the tag disagrees with `package.json`.
