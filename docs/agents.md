@@ -48,9 +48,11 @@ When an agent decides this tool belongs in a project (for example after an audit
 findings), the full adoption is three non-interactive, idempotent-safe commands:
 
 ```sh
-npx @jqntn/agentdoctor --init-ci      # writes .github/workflows/agentdoctor.yml (SARIF + gate)
-npx @jqntn/agentdoctor --init-skill   # writes .claude/skills/config-audit/SKILL.md
-npx @jqntn/agentdoctor --write-baseline .agentdoctor-baseline.json   # only if findings exist today
+npx @jqntn/agentdoctor --init-ci     # writes .github/workflows/agentdoctor.yml
+npx @jqntn/agentdoctor --init-skill  # writes .claude/skills/config-audit/SKILL.md
+
+# only if the project already has findings today
+npx @jqntn/agentdoctor --write-baseline .agentdoctor-baseline.json
 ```
 
 Each `--init-*` command writes exactly one well-known file, refuses to overwrite, and exits 2
@@ -87,8 +89,11 @@ across projects):
 
 ```sh
 mkdir -p ~/.codex/prompts
-npx @jqntn/agentdoctor --init-agents   # project instructions
-cp node_modules/@jqntn/agentdoctor/plugin/skills/config-audit/SKILL.md ~/.codex/prompts/audit-config.md   # optional /audit-config
+# project instructions, read by Codex
+npx @jqntn/agentdoctor --init-agents
+
+# optional: a reusable /audit-config prompt, user-scoped across projects
+cp node_modules/@jqntn/agentdoctor/plugin/skills/config-audit/SKILL.md ~/.codex/prompts/audit-config.md
 ```
 
 ## The standalone skill and plugin

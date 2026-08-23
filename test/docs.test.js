@@ -164,3 +164,51 @@ test('README HTML attributes contain no unescaped angle brackets', async () => {
   }
   assert.deepEqual(offenders, [], `escape as &lt; / &gt;: ${offenders.join(' | ')}`);
 });
+
+test('trailing comments in code blocks are aligned', async () => {
+  // Ragged `#` comments in a README code block read as carelessness, and it is
+  // the kind of thing nobody notices while writing and everybody notices while
+  // reading. Checked mechanically instead.
+  const { readdirSync } = await import('node:fs');
+  const root = fileURLToPath(new URL('..', import.meta.url));
+  const files = [
+    'README.md', 'AGENTS.md', 'CLAUDE.md', 'CONTRIBUTING.md', 'SECURITY.md', 'CHANGELOG.md',
+    'plugin/README.md', 'plugin/skills/config-audit/SKILL.md',
+    'plugin/skills/config-audit/references/fix-recipes.md',
+    ...readdirSync(join(root, 'docs')).filter((f) => f.endsWith('.md')).map((f) => `docs/${f}`),
+  ];
+
+  /** Column of a spaced trailing comment, or null for a full-line one. */
+  const commentColumn = (line, lang) => {
+    const marker = ['js', 'javascript', 'ts', 'json'].includes(lang) ? '//' : '#';
+    const idx = line.indexOf(` ${marker}`);
+    if (idx <= 0) return null;
+    const before = line.slice(0, idx);
+    if (!before.trim()) return null;
+    // Skip markers that sit inside a quoted string.
+    if ((before.split('"').length - 1) % 2 || (before.split("'").length - 1) % 2) return null;
+    return idx + 1;
+  };
+
+  const offenders = [];
+  for (const file of files) {
+    const lines = readFileSync(join(root, file), 'utf8').split('\n');
+    let inBlock = false, lang = '', group = [];
+    const flush = () => {
+      if (group.length > 1 && new Set(group.map((g) => g.col)).size > 1) {
+        offenders.push(`${file}:${group[0].line} (columns ${group.map((g) => g.col).join(', ')})`);
+      }
+      group = [];
+    };
+    lines.forEach((line, i) => {
+      const fence = /^\s*```(\w*)/.exec(line);
+      if (fence) { flush(); inBlock = !inBlock; lang = inBlock ? fence[1] : ''; return; }
+      if (!inBlock) { flush(); return; }
+      const col = commentColumn(line, lang);
+      if (col === null) flush();
+      else group.push({ line: i + 1, col });
+    });
+    flush();
+  }
+  assert.deepEqual(offenders, [], `misaligned trailing comments: ${offenders.join('; ')}`);
+});

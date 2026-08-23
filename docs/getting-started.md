@@ -16,7 +16,7 @@ npx @jqntn/agentdoctor
 Or install it:
 
 ```sh
-npm install -g @jqntn/agentdoctor     # global CLI
+npm install -g @jqntn/agentdoctor    # global CLI
 npm install -D @jqntn/agentdoctor    # per-project, for CI
 ```
 

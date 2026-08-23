@@ -158,7 +158,7 @@ unrelated edits never invalidate them:
 
 ```sh
 agentdoctor --write-baseline .agentdoctor-baseline.json   # once
-agentdoctor --baseline .agentdoctor-baseline.json          # in CI
+agentdoctor --baseline .agentdoctor-baseline.json         # in CI
 ```
 
 [CI guide](docs/ci.md) · [Baselines](docs/baselines.md)
@@ -175,9 +175,14 @@ The repo is also a **Claude Code plugin**: it ships the
 invokable as `/agentdoctor:config-audit`. Install it any of three ways:
 
 ```
-/plugin marketplace add jqntn/agentdoctor    # in Claude Code, then: /plugin install agentdoctor
-npx @jqntn/agentdoctor --init-skill                      # copies the skill into this project
-cp -r node_modules/@jqntn/agentdoctor/plugin/skills/config-audit .claude/skills/   # manual
+# in Claude Code, then: /plugin install agentdoctor
+/plugin marketplace add jqntn/agentdoctor
+
+# copies the skill into this project only
+npx @jqntn/agentdoctor --init-skill
+
+# by hand, from an installed package
+cp -r node_modules/@jqntn/agentdoctor/plugin/skills/config-audit .claude/skills/
 ```
 
 [Agent guide](docs/agents.md)
