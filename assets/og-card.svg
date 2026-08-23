@@ -13,7 +13,7 @@
   <text x="268" y="200" font-family="ui-monospace,'JetBrains Mono','SF Mono',SFMono-Regular,Menlo,Consolas,monospace" font-size="84" font-weight="700" letter-spacing="-0.5"><tspan fill="#F1F5F9">agent</tspan><tspan fill="#34D399">doctor</tspan></text>
   <text x="100" y="330" font-family="ui-monospace,'JetBrains Mono','SF Mono',SFMono-Regular,Menlo,Consolas,monospace" font-size="40" fill="#CBD5E1">Lint your AI coding agent&#8217;s configuration.</text>
   <text x="100" y="392" font-family="ui-monospace,'JetBrains Mono','SF Mono',SFMono-Regular,Menlo,Consolas,monospace" font-size="28" fill="#64748B">Permissions &#183; hooks &#183; MCP servers &#183; skills &#183; memory files</text>
-  <rect x="96" y="452" width="470" height="76" rx="14" fill="#020617" stroke="#1E293B" stroke-width="2"/>
+  <rect x="96" y="452" width="517" height="76" rx="14" fill="#020617" stroke="#1E293B" stroke-width="2"/>
   <text x="126" y="501" font-family="ui-monospace,'JetBrains Mono','SF Mono',SFMono-Regular,Menlo,Consolas,monospace" font-size="32"><tspan fill="#34D399">$</tspan><tspan fill="#F1F5F9" dx="14">npx @jqntn/agentdoctor</tspan></text>
   <text x="100" y="584" font-family="ui-monospace,'JetBrains Mono','SF Mono',SFMono-Regular,Menlo,Consolas,monospace" font-size="26" fill="#64748B">72 rules &#183; zero dependencies &#183; no telemetry &#183; MIT</text>
 </svg>
