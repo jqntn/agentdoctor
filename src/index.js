@@ -3,7 +3,7 @@ import { lint, fingerprint, helpers } from './engine.js';
 import { allRules, CATEGORIES } from './rules/index.js';
 import { loadPolicy } from './rules/policy.js';
 
-export const VERSION = '0.1.1';
+export const VERSION = '0.1.2';
 
 /**
  * One-call entry point: discover config, load any team policy, run every rule.
