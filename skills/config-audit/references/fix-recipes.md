@@ -1,7 +1,7 @@
 # Fix recipes
 
 Read this when a finding's `help` text is not enough to act on. Recipes are grouped by rule
-id prefix. Full rationale for any rule: `npx agentdoctor --explain <rule-id>`.
+id prefix. Full rationale for any rule: `npx @jqntn/agentdoctor --explain <rule-id>`.
 
 ## security/unrestricted-bash, security/unrestricted-egress
 
@@ -78,7 +78,7 @@ copy. Never keep both — they drift until they contradict.
 If the user wants CI green today without fixing the backlog:
 
 ```sh
-npx agentdoctor --no-user --write-baseline .agentdoctor-baseline.json
+npx @jqntn/agentdoctor --no-user --write-baseline .agentdoctor-baseline.json
 ```
 
 Commit the baseline. CI then runs with `--baseline .agentdoctor-baseline.json` and fails only
@@ -90,7 +90,7 @@ not for hazards.
 If the user manages multiple repos, offer:
 
 ```sh
-npx agentdoctor --init-policy
+npx @jqntn/agentdoctor --init-policy
 ```
 
 Then edit `agentdoctor.policy.json` with them. Wildcards: a single `*` is literal (matches
@@ -100,8 +100,8 @@ sudo).
 ## Permanent installation
 
 ```sh
-npx agentdoctor --init-ci      # GitHub Actions: SARIF PR annotations + error gate
-npx agentdoctor --badge        # README badge showing the current grade
+npx @jqntn/agentdoctor --init-ci      # GitHub Actions: SARIF PR annotations + error gate
+npx @jqntn/agentdoctor --badge        # README badge showing the current grade
 ```
 
 Both are overwrite-safe (they refuse if the file exists).

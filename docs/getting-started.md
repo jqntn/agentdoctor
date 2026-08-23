@@ -10,14 +10,14 @@ packages.
 No install needed:
 
 ```sh
-npx agentdoctor
+npx @jqntn/agentdoctor
 ```
 
 Or install it:
 
 ```sh
-npm install -g agentdoctor     # global CLI
-npm install -D agentdoctor    # per-project, for CI
+npm install -g @jqntn/agentdoctor     # global CLI
+npm install -D @jqntn/agentdoctor    # per-project, for CI
 ```
 
 By default it audits the current directory plus your user-level config in `~/.claude`. To audit

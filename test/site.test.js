@@ -32,7 +32,7 @@ test('the site builds with a landing page, all doc pages, and agent surfaces', (
 test('the landing page states the real rule count', () => {
   const index = readFileSync(join(SITE, 'index.html'), 'utf8');
   assert.match(index, new RegExp(`${allRules.length} rules`));
-  assert.match(index, /npx agentdoctor/);
+  assert.match(index, /npx @jqntn\/agentdoctor/);
   assert.doesNotMatch(index, /licence key|license key|paid tier/i);
 });
 

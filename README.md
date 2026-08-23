@@ -8,7 +8,7 @@
 
   <p>
     <a href="https://github.com/jqntn/agentdoctor/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/jqntn/agentdoctor/actions/workflows/ci.yml/badge.svg"></a>
-    <a href="https://www.npmjs.com/package/agentdoctor"><img alt="npm" src="https://img.shields.io/npm/v/agentdoctor"></a>
+    <a href="https://www.npmjs.com/package/@jqntn/agentdoctor"><img alt="npm" src="https://img.shields.io/npm/v/%40jqntn%2Fagentdoctor"></a>
     <img alt="zero dependencies" src="https://img.shields.io/badge/dependencies-0-34D399">
     <img alt="node >=20" src="https://img.shields.io/badge/node-%3E%3D20-64748B">
     <a href="LICENSE"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-blue"></a>
@@ -35,7 +35,7 @@ proposes runs without asking you.
 `agentdoctor` reads that config and tells you what is actually wrong with it:
 
 ```sh
-npx agentdoctor
+npx @jqntn/agentdoctor
 ```
 
 ```
@@ -122,11 +122,11 @@ committed permission set. [Policy guide](docs/policy.md).
 ## Adopt it in one command
 
 ```sh
-npx agentdoctor --init-ci      # GitHub Actions: SARIF annotations on PRs + error gate
-npx agentdoctor --init-skill   # Claude Code skill: findings -> fixes, automatically
-npx agentdoctor --init-agents  # AGENTS.md section: same loop for Codex, Cursor, Gemini CLI
-npx agentdoctor --badge        # README badge with your current grade
-npx agentdoctor --share        # paste-ready score card (rule ids + counts only)
+npx @jqntn/agentdoctor --init-ci      # GitHub Actions: SARIF annotations on PRs + error gate
+npx @jqntn/agentdoctor --init-skill   # Claude Code skill: findings -> fixes, automatically
+npx @jqntn/agentdoctor --init-agents  # AGENTS.md section: same loop for Codex, Cursor, Gemini CLI
+npx @jqntn/agentdoctor --badge        # README badge with your current grade
+npx @jqntn/agentdoctor --share        # paste-ready score card (rule ids + counts only)
 ```
 
 Every audit ends in a grade - `A+` down to `F`, formula stated in the docs. The badge and the
@@ -138,11 +138,11 @@ safe to post from private repos.
 ## CI
 
 ```yaml
-- run: npx agentdoctor --no-user --sarif > agentdoctor.sarif
+- run: npx @jqntn/agentdoctor --no-user --sarif > agentdoctor.sarif
   continue-on-error: true
 - uses: github/codeql-action/upload-sarif@v3
   with: { sarif_file: agentdoctor.sarif }
-- run: npx agentdoctor --no-user --quiet   # exit 1 on errors
+- run: npx @jqntn/agentdoctor --no-user --quiet   # exit 1 on errors
 ```
 
 Findings annotate the PR diff via SARIF. Adopting on a repo with existing findings? Record
@@ -169,8 +169,8 @@ an `/agentdoctor:audit` command. Install it any of three ways:
 
 ```
 /plugin marketplace add jqntn/agentdoctor    # in Claude Code, then: /plugin install agentdoctor
-npx agentdoctor --init-skill                      # copies the skill into this project
-cp -r node_modules/agentdoctor/skills/config-audit .claude/skills/   # manual
+npx @jqntn/agentdoctor --init-skill                      # copies the skill into this project
+cp -r node_modules/@jqntn/agentdoctor/skills/config-audit .claude/skills/   # manual
 ```
 
 [Agent guide](docs/agents.md)

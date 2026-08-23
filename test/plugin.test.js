@@ -46,6 +46,6 @@ test('the standalone skill passes the standards agentdoctor holds others to', ()
 test('the slash command exists with a description and defers to the skill rules', () => {
   const { frontmatter, body } = parseFrontmatter(read('commands/audit.md'));
   assert.ok(frontmatter.description.length > 20);
-  assert.match(body, /npx agentdoctor . --no-user --json/);
+  assert.match(body, /npx @jqntn\/agentdoctor \. --no-user --json/);
   assert.match(body, /Never delete or weaken/);
 });

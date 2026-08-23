@@ -79,5 +79,5 @@ should not install one.
 
 ## Can I use it as a library?
 
-Yes — `import { run } from 'agentdoctor'` and you get structured findings. See the
+Yes — `import { run } from '@jqntn/agentdoctor'` and you get structured findings. See the
 [API docs](api.md), including how to add organisation-specific rules.

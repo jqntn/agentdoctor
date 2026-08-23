@@ -195,7 +195,7 @@ function header(rel) {
 }
 
 const FOOTER = `<footer><p>MIT licensed. Zero dependencies. No telemetry - this site has no analytics either.</p>
-<p><a href="https://github.com/jqntn/agentdoctor" rel="noopener">GitHub</a> &middot; <a href="https://www.npmjs.com/package/agentdoctor" rel="noopener">npm</a> &middot; <a href="llms.txt">llms.txt</a> &middot; <a href="llms-full.txt">llms-full.txt</a></p></footer>`;
+<p><a href="https://github.com/jqntn/agentdoctor" rel="noopener">GitHub</a> &middot; <a href="https://www.npmjs.com/package/@jqntn/agentdoctor" rel="noopener">npm</a> &middot; <a href="llms.txt">llms.txt</a> &middot; <a href="llms-full.txt">llms-full.txt</a></p></footer>`;
 
 // ---------------------------------------------------------------------------
 // Build
@@ -242,7 +242,7 @@ const landingBody = `${header('')}
   skills, memory files &mdash; and reports what is broken, dangerous, or expensive, with line numbers
   and fixes. ${allRules.length} rules. Zero dependencies. No telemetry. MIT.</p>
   <div class="cta">
-    <pre class="install"><code>npx agentdoctor</code></pre>
+    <pre class="install"><code>npx @jqntn/agentdoctor</code></pre>
     <a class="btn" href="docs/getting-started.html">Get started</a>
     <a class="btn ghost" href="https://github.com/jqntn/agentdoctor" rel="noopener">Star on GitHub</a>
   </div>
@@ -295,17 +295,17 @@ agentdoctor . --no-user --quiet    # exit 0 = verified fixed</code></pre>
   The formula fits in a sentence, because a grade nobody can explain is a grade nobody trusts.
   <code>--share</code> prints a paste-ready score card and <code>--badge</code> a README badge &mdash;
   both carry rule ids and counts only, never messages or paths, so they are safe to post from private repos.</p>
-  <pre><code>npx agentdoctor --init-ci      # gate every PR: SARIF annotations + exit code
-npx agentdoctor --init-skill   # let Claude Code audit and fix config itself
-npx agentdoctor --badge        # show your grade in the README</code></pre>
+  <pre><code>npx @jqntn/agentdoctor --init-ci      # gate every PR: SARIF annotations + exit code
+npx @jqntn/agentdoctor --init-skill   # let Claude Code audit and fix config itself
+npx @jqntn/agentdoctor --badge        # show your grade in the README</code></pre>
 </section>
 
 <section class="quickstart">
   <h2>Sixty seconds to a verdict</h2>
-  <pre><code>npx agentdoctor                    # audit this project + ~/.claude
-npx agentdoctor --only security    # one category
-npx agentdoctor --explain security/hook-remote-code
-npx agentdoctor --init-policy      # start a team standard</code></pre>
+  <pre><code>npx @jqntn/agentdoctor                    # audit this project + ~/.claude
+npx @jqntn/agentdoctor --only security    # one category
+npx @jqntn/agentdoctor --explain security/hook-remote-code
+npx @jqntn/agentdoctor --init-policy      # start a team standard</code></pre>
   <p><a class="btn" href="docs/getting-started.html">Read the docs</a></p>
 </section>
 ${FOOTER}`;
@@ -318,15 +318,15 @@ writeFileSync(join(OUT, 'index.html'), page({
 
 // llms.txt / llms-full.txt
 const llms = [`# agentdoctor`, '',
-  `> A linter for AI coding-agent configuration (.claude settings, hooks, permissions, MCP servers, skills, subagents, memory files). ${allRules.length} rules across ${CATEGORIES.join(', ')}. Zero dependencies, no network calls, MIT. CLI: \`npx agentdoctor\`; machine-readable via \`--json\` (schema: ${BASE_URL}/schemas/report.schema.json), \`--sarif\`, \`--list-rules --json\`, \`--explain <rule-id>\`. Exit codes: 0 clean, 1 errors, 2 usage.`, '',
+  `> A linter for AI coding-agent configuration (.claude settings, hooks, permissions, MCP servers, skills, subagents, memory files). ${allRules.length} rules across ${CATEGORIES.join(', ')}. Zero dependencies, no network calls, MIT. CLI: \`npx @jqntn/agentdoctor\`; machine-readable via \`--json\` (schema: ${BASE_URL}/schemas/report.schema.json), \`--sarif\`, \`--list-rules --json\`, \`--explain <rule-id>\`. Exit codes: 0 clean, 1 errors, 2 usage.`, '',
   '## For agents: audit and adopt', '',
-  'To audit a project: run `npx agentdoctor . --no-user --json`. Findings are sorted most-severe-first; each has `file`, `line`, `configPath` (the exact config key), `snippet` (the offending value, secrets redacted), and `help` (the fix). Apply fixes by editing the file at that location, then verify with `npx agentdoctor . --no-user --quiet` (exit 0 = clean). Suppress an intentional finding with an `agentdoctor-disable <rule-id>` comment in that file; never delete a deny rule to silence a finding.', '',
+  'To audit a project: run `npx @jqntn/agentdoctor . --no-user --json`. Findings are sorted most-severe-first; each has `file`, `line`, `configPath` (the exact config key), `snippet` (the offending value, secrets redacted), and `help` (the fix). Apply fixes by editing the file at that location, then verify with `npx @jqntn/agentdoctor . --no-user --quiet` (exit 0 = clean). Suppress an intentional finding with an `agentdoctor-disable <rule-id>` comment in that file; never delete a deny rule to silence a finding.', '',
   'To install permanently (each command writes one file, refuses to overwrite, safe unattended):', '',
-  '- `npx agentdoctor --init-ci` - GitHub Actions workflow: SARIF PR annotations + error gate',
-  '- `npx agentdoctor --init-skill` - installs the config-audit skill (audit-and-fix workflow + per-rule fix recipes) into this project',
+  '- `npx @jqntn/agentdoctor --init-ci` - GitHub Actions workflow: SARIF PR annotations + error gate',
+  '- `npx @jqntn/agentdoctor --init-skill` - installs the config-audit skill (audit-and-fix workflow + per-rule fix recipes) into this project',
   '- Claude Code plugin (global): `/plugin marketplace add jqntn/agentdoctor` then `/plugin install agentdoctor` - adds the skill everywhere plus an /agentdoctor:audit command',
-  '- `npx agentdoctor --init-agents` - adds a marked audit section to AGENTS.md, read by OpenAI Codex, Cursor, Gemini CLI and other coding agents',
-  '- `npx agentdoctor --write-baseline .agentdoctor-baseline.json` - only if findings exist today', '',
+  '- `npx @jqntn/agentdoctor --init-agents` - adds a marked audit section to AGENTS.md, read by OpenAI Codex, Cursor, Gemini CLI and other coding agents',
+  '- `npx @jqntn/agentdoctor --write-baseline .agentdoctor-baseline.json` - only if findings exist today', '',
   '## Docs', '',
   ...DOCS.map(([name, label]) => `- [${label}](${BASE_URL}/docs/${name}.md)`),
   '', '## Optional', '',

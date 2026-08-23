@@ -46,7 +46,7 @@ test('--share prints a paste-ready card with no leakable content', () => {
   const result = cli([MESSY, '--no-user', '--share']);
   assert.equal(result.code, 0, '--share is for sharing, not gating - it must exit 0 even with findings');
   assert.match(result.stdout, /agentdoctor grade: F/);
-  assert.match(result.stdout, /npx agentdoctor/);
+  assert.match(result.stdout, /npx @jqntn\/agentdoctor/);
   // Only rule ids and counts: no file paths, messages, or snippets may leak.
   assert.doesNotMatch(result.stdout, /settings\.json|CLAUDE\.md|\.mcp\.json/);
   assert.doesNotMatch(result.stdout, /sk-ant|ghp_/);
@@ -67,9 +67,9 @@ test('--init-ci writes a working workflow once and refuses to overwrite', () => 
     const first = cli(['--init-ci', root]);
     assert.equal(first.code, 0);
     const workflow = readFileSync(join(root, '.github/workflows/agentdoctor.yml'), 'utf8');
-    assert.match(workflow, /npx agentdoctor --no-user --sarif/);
+    assert.match(workflow, /npx @jqntn\/agentdoctor --no-user --sarif/);
     assert.match(workflow, /upload-sarif/);
-    assert.match(workflow, /npx agentdoctor --no-user --quiet/);
+    assert.match(workflow, /npx @jqntn\/agentdoctor --no-user --quiet/);
     assert.match(workflow, /write-baseline/, 'the baseline escape hatch must be documented in the file itself');
     assert.equal(cli(['--init-ci', root]).code, 2, 'must not overwrite an existing workflow');
   } finally {
@@ -113,7 +113,7 @@ test('--init-agents creates, appends, and refuses to duplicate', () => {
     assert.equal(cli(['--init-agents', fresh]).code, 0);
     const created = readFileSync(join(fresh, 'AGENTS.md'), 'utf8');
     assert.match(created, /<!-- agentdoctor:start -->/);
-    assert.match(created, /npx agentdoctor \. --no-user --json/);
+    assert.match(created, /npx @jqntn\/agentdoctor \. --no-user --json/);
     assert.match(created, /Never delete or\s+weaken/);
     assert.equal(cli(['--init-agents', fresh]).code, 2, 'must not duplicate the section');
   } finally {
