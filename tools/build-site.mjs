@@ -199,6 +199,8 @@ const FOOTER = `<footer><p>MIT licensed. Zero dependencies. No telemetry - this 
 <p><a href="https://github.com/jqntn/agentdoctor" rel="noopener">GitHub</a> &middot; <a href="https://www.npmjs.com/package/@jqntn/agentdoctor" rel="noopener">npm</a> &middot; <a href="llms.txt">llms.txt</a> &middot; <a href="llms-full.txt">llms-full.txt</a></p>
 <p class="badges"><a href="https://openhunts.com" target="_blank" title="OpenHunts Club">
   <img alt="OpenHunts Club Member" height="105" src="https://cdn.openhunts.com/badges/club.webp" style="width: 195px; height: auto;" width="486">
+</a><a href="https://smollaunch.com" target="_blank" rel="noopener">
+  <img src="https://smollaunch.com/badges/featured.svg" alt="agentdoctor &mdash; Featured on Smol Launch" loading="lazy" width="250" height="60" />
 </a></p></footer>`;
 
 // ---------------------------------------------------------------------------
