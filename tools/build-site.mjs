@@ -321,7 +321,7 @@ ${FOOTER}`;
 
 writeFileSync(join(OUT, 'index.html'), page({
   title: 'agentdoctor - lint your AI coding agent configuration',
-  description: `A linter for AI coding-agent configuration: ${allRules.length} rules across permissions, hooks, MCP servers, skills and memory files. Zero dependencies, no telemetry, MIT.`,
+  description: 'A linter for AI coding-agent configuration: permissions, hooks, MCP servers, skills and memory files. A correctly configured project reports nothing. Zero dependencies, no telemetry, MIT.',
   body: landingBody, path: '', isDocs: false,
 }));
 
