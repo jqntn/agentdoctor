@@ -70,6 +70,18 @@ jobs:
         if: github.event_name == 'release' || inputs.dry-run == false
         run: npm publish --access public
 
+      # A dry run must not try to publish the current version: once that version
+      # exists, `npm publish --dry-run` always fails on the conflict and the
+      # check becomes useless. Validate the tarball instead, and report whether
+      # the version is still free so the answer is actionable before tagging.
       - name: Dry run
         if: github.event_name == 'workflow_dispatch' && inputs.dry-run
-        run: npm publish --access public --dry-run
+        run: |
+          npm pack --dry-run
+          NAME="$(node -p 'require("./package.json").name')"
+          VERSION="$(node -p 'require("./package.json").version')"
+          if npm view "$NAME@$VERSION" version >/dev/null 2>&1; then
+            echo "::warning::$NAME@$VERSION is already published - bump the version before releasing"
+          else
+            echo "$NAME@$VERSION is unpublished and the tarball builds; ready to release"
+          fi
