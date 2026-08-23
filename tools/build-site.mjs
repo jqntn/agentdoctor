@@ -195,7 +195,10 @@ function header(rel) {
 }
 
 const FOOTER = `<footer><p>MIT licensed. Zero dependencies. No telemetry - this site has no analytics either.</p>
-<p><a href="https://github.com/jqntn/agentdoctor" rel="noopener">GitHub</a> &middot; <a href="https://www.npmjs.com/package/@jqntn/agentdoctor" rel="noopener">npm</a> &middot; <a href="llms.txt">llms.txt</a> &middot; <a href="llms-full.txt">llms-full.txt</a></p></footer>`;
+<p><a href="https://github.com/jqntn/agentdoctor" rel="noopener">GitHub</a> &middot; <a href="https://www.npmjs.com/package/@jqntn/agentdoctor" rel="noopener">npm</a> &middot; <a href="llms.txt">llms.txt</a> &middot; <a href="llms-full.txt">llms-full.txt</a></p>
+<p class="badges"><a href="https://openhunts.com" target="_blank" title="OpenHunts Club">
+  <img alt="OpenHunts Club Member" height="105" src="https://cdn.openhunts.com/badges/club.webp" style="width: 195px; height: auto;" width="486">
+</a></p></footer>`;
 
 // ---------------------------------------------------------------------------
 // Build
