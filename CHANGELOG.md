@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.1.3
+
+- `fix(report)`: the summary line mixed two separator styles, reading
+  `Summary  Grade F  3 errors  - 72 rules in 41ms`. Run metadata is now
+  parenthesised: `Summary  Grade F  3 errors, 1 warning  (72 rules, 41ms)`. The
+  skipped-files line used a hyphen where a colon belonged and printed `file(s)`
+  instead of pluralising.
+- `refactor(plugin)`: the Claude Code plugin moved to `plugin/`, containing only
+  its manifest and the canonical skill. The marketplace entry previously pointed
+  at the repository root, so installing the plugin fetched 2.1 MB across 107
+  files - including test fixtures full of deliberately hostile config - where it
+  needs 40 KB in 4. `--init-skill` copies from the new path; the byte-identity
+  guarantee between the marketplace and CLI routes is unchanged.
+- `docs`: the README and docs now lead on the rule-quality bar rather than a rule
+  count, which drifts with every rule and advertises the wrong thing. A privacy
+  page was added, stating what the tool reads, what it refuses to read, and that
+  it makes no network calls. Trailing comments in code blocks are aligned.
+
 ## 0.1.2
 
 No change to the rules, CLI or output. The published tarball differs from 0.1.1 by a single

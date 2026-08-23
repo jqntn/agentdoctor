@@ -1,7 +1,7 @@
 {
   "name": "agentdoctor",
   "description": "Audit and fix AI coding-agent configuration: permissions, hooks, MCP servers, skills and memory files. Adds the config-audit skill, invokable as /agentdoctor:config-audit. The linter itself runs via npx - nothing else to install.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": {
     "name": "Julien QUENTIN",
     "url": "https://github.com/jqntn"
