@@ -65,7 +65,7 @@ agent that can run a shell command can use agentdoctor. What differs per tool is
 
 | Agent | Mechanism | Install |
 |---|---|---|
-| Claude Code | Skill + plugin (`/agentdoctor:audit`) | `/plugin marketplace add jqntn/agentdoctor` or `npx @jqntn/agentdoctor --init-skill` |
+| Claude Code | Skill + plugin (`/agentdoctor:config-audit`) | `/plugin marketplace add jqntn/agentdoctor` or `npx @jqntn/agentdoctor --init-skill` |
 | OpenAI Codex | `AGENTS.md` | `npx @jqntn/agentdoctor --init-agents` |
 | Cursor | `AGENTS.md` | `npx @jqntn/agentdoctor --init-agents` |
 | Gemini CLI / Jules | `AGENTS.md` | `npx @jqntn/agentdoctor --init-agents` |
@@ -103,7 +103,7 @@ Three ways to install it:
 
 | Method | Command | Scope |
 |---|---|---|
-| Claude Code plugin | `/plugin marketplace add jqntn/agentdoctor` then `/plugin install agentdoctor` | everywhere (also adds `/agentdoctor:audit`) |
+| Claude Code plugin | `/plugin marketplace add jqntn/agentdoctor` then `/plugin install agentdoctor` | everywhere, invokable as `/agentdoctor:config-audit` |
 | CLI | `npx @jqntn/agentdoctor --init-skill` | this project |
 | Manual | `cp -r node_modules/@jqntn/agentdoctor/skills/config-audit .claude/skills/` | anywhere |
 

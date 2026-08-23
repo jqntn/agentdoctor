@@ -43,9 +43,10 @@ test('the standalone skill passes the standards agentdoctor holds others to', ()
   assert.match(recipes, /rotate the credential/i);
 });
 
-test('the slash command exists with a description and defers to the skill rules', () => {
-  const { frontmatter, body } = parseFrontmatter(read('commands/audit.md'));
-  assert.ok(frontmatter.description.length > 20);
-  assert.match(body, /npx @jqntn\/agentdoctor \. --no-user --json/);
-  assert.match(body, /Never delete or weaken/);
+test('the plugin exposes exactly one entry point, to avoid duplicate skills', async () => {
+  // Two near-identical entry points (a model-invoked skill plus a
+  // command-only twin) only confuses users about which to reach for.
+  const { readdirSync } = await import('node:fs');
+  const dir = fileURLToPath(new URL('../skills', import.meta.url));
+  assert.deepEqual(readdirSync(dir), ['config-audit']);
 });

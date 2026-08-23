@@ -47,7 +47,6 @@ test/fixtures/messy/     a broken project: broad rule coverage
 docs/*.md                source of truth for the site; rules.md is GENERATED
 skills/config-audit/     the canonical standalone skill; --init-skill copies it verbatim
 .claude-plugin/          plugin + marketplace manifests (repo installs as a Claude Code plugin)
-commands/audit.md        the /agentdoctor:audit slash command
 ```
 
 ## Invariants (all test-enforced — breaking one fails `npm test`)
