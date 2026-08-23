@@ -17,7 +17,7 @@ test('the plugin manifest is valid and version-locked to the package', () => {
 
 test('the marketplace manifest lists this repo as an installable plugin', () => {
   const marketplace = JSON.parse(read('.claude-plugin/marketplace.json'));
-  assert.equal(marketplace.name, 'agentdoctor');
+  assert.equal(marketplace.name, 'jqntn', 'marketplace is named for its owner, so installs read agentdoctor@jqntn');
   assert.equal(marketplace.plugins.length, 1);
   assert.equal(marketplace.plugins[0].name, 'agentdoctor');
   assert.equal(marketplace.plugins[0].source, './plugin');

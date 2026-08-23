@@ -1,6 +1,6 @@
 {
   "name": "@jqntn/agentdoctor",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Lint and grade your AI coding-agent configuration: permissions, hooks, MCP servers, skills, subagents and CLAUDE.md. Catches silent failures, security holes and context waste, with fixes. Zero dependencies, no telemetry.",
   "keywords": [
     "agent",

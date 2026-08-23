@@ -4,6 +4,13 @@ This directory is the installable plugin: a manifest and the `config-audit` skil
 else. It is deliberately separate from the repository root so that installing the plugin fetches
 only these files — not the linter's source, its test fixtures, or the site generator.
 
+## Install
+
+```sh
+/plugin marketplace add jqntn/agentdoctor
+/plugin install agentdoctor@jqntn
+```
+
 The skill shells out to `npx @jqntn/agentdoctor`, so the plugin itself installs no binary.
 
 - Source and issues: <https://github.com/jqntn/agentdoctor>

@@ -196,6 +196,29 @@ test('policy forbids a listed allow rule and a listed permission mode', () => {
   }
 });
 
+test('real settings keys are never reported as unrecognised', () => {
+  // Found in the wild: enabledPlugins and extraKnownMarketplaces are written by
+  // Claude Code itself, so every user with a plugin installed saw them flagged.
+  // A false positive on a key the harness writes is the worst kind - the user
+  // cannot act on it and cannot make it go away.
+  const real = {
+    enabledPlugins: {}, extraKnownMarketplaces: {}, availableModels: [],
+    modelOverrides: {}, fallbackModel: 'sonnet', effortLevel: 'high',
+    useAutoModeDuringPlan: true, allowManagedPermissionRulesOnly: false,
+    disableClaudeAiConnectors: false, isolatePeerMachines: false,
+    remoteControlAtStartup: false, requiredMinimumVersion: '2.0.0',
+    syncClaudeAiSkills: true, crossSessionInbound: 'accept',
+  };
+  const root = makeProject({ '.claude/settings.json': real });
+  try {
+    const hits = findingsFor(scan(root), 'correctness/unknown-settings-key');
+    assert.deepEqual(hits.map((f) => f.configPath), [],
+      `these are documented settings and must not be flagged: ${hits.map((f) => f.configPath).join(', ')}`);
+  } finally {
+    cleanup(root);
+  }
+});
+
 test('every shipped rule is exercised by the test suite', async () => {
   // Guards against a rule being added with no test: each rule id must appear in
   // at least one test file, which is what keeps the catalogue honest.

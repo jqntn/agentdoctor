@@ -15,6 +15,16 @@ export const SETTINGS_KEYS = new Set([
   'sandbox', 'agents', 'alwaysThinkingEnabled', 'spinnerTipsEnabled',
   'attributionSuffix', 'autoUpdates', 'installMethod', 'mcpServers',
   'extraKnownMarkdownFiles', 'schema', '$schema',
+  // Plugin and marketplace state, written by Claude Code itself - so anyone with
+  // a plugin installed would otherwise see these flagged as unrecognised.
+  'enabledPlugins', 'extraKnownMarketplaces',
+  // Model selection and effort.
+  'availableModels', 'modelOverrides', 'fallbackModel', 'effortLevel',
+  'useAutoModeDuringPlan',
+  // Managed/enterprise and remote-control settings.
+  'allowManagedPermissionRulesOnly', 'disableClaudeAiConnectors',
+  'isolatePeerMachines', 'remoteControlAtStartup', 'requiredMinimumVersion',
+  'syncClaudeAiSkills', 'crossSessionInbound',
 ]);
 
 export const PERMISSION_KEYS = new Set([

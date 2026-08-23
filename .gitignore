@@ -3,3 +3,4 @@ node_modules/
 .agentdoctor-baseline.json
 coverage/
 site/
+.claude/settings.local.json

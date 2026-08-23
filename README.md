@@ -68,6 +68,28 @@ Summary  Grade F  3 errors, 1 warning  (72 rules, 41ms)
 
 Zero dependencies. No network calls. Credential files are never opened. MIT — all of it.
 
+## Install
+
+Run it once with no install at all:
+
+```sh
+npx @jqntn/agentdoctor
+```
+
+Install the CLI:
+
+```sh
+npm install -g @jqntn/agentdoctor
+npm install -D @jqntn/agentdoctor
+```
+
+Install as a Claude Code plugin, which adds the audit skill to every session:
+
+```sh
+/plugin marketplace add jqntn/agentdoctor
+/plugin install agentdoctor@jqntn
+```
+
 ## What it checks
 
 Findings fall into five categories. The bar for a rule is that it catches a failure that
@@ -175,14 +197,8 @@ The repo is also a **Claude Code plugin**: it ships the
 invokable as `/agentdoctor:config-audit`. Install it any of three ways:
 
 ```
-# in Claude Code, then: /plugin install agentdoctor
 /plugin marketplace add jqntn/agentdoctor
-
-# copies the skill into this project only
-npx @jqntn/agentdoctor --init-skill
-
-# by hand, from an installed package
-cp -r node_modules/@jqntn/agentdoctor/plugin/skills/config-audit .claude/skills/
+/plugin install agentdoctor@jqntn
 ```
 
 [Agent guide](docs/agents.md)

@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.1.4
+
+- `fix(rules)`: 14 real settings keys were reported as unrecognised, including
+  `enabledPlugins` and `extraKnownMarketplaces` - which Claude Code writes
+  itself, so **every user with a plugin installed** saw a bogus finding they
+  could neither act on nor silence. Also added were `availableModels`,
+  `modelOverrides`, `fallbackModel`, `effortLevel`, `useAutoModeDuringPlan`,
+  `allowManagedPermissionRulesOnly`, `disableClaudeAiConnectors`,
+  `isolatePeerMachines`, `remoteControlAtStartup`, `requiredMinimumVersion`,
+  `syncClaudeAiSkills` and `crossSessionInbound`.
+- `docs`: the README now has an Install section with runnable commands. The
+  plugin install was previously only present inside a `#` comment, which a
+  registry's documentation check flagged and which a reader could not copy.
+- The self-hosted marketplace is renamed `jqntn`, so installs read
+  `agentdoctor@jqntn` rather than `agentdoctor@agentdoctor`.
+
 ## 0.1.3
 
 - `fix(report)`: the summary line mixed two separator styles, reading

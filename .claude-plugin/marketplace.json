@@ -1,5 +1,5 @@
 {
-  "name": "agentdoctor",
+  "name": "jqntn",
   "description": "Tooling for auditing AI coding-agent configuration. Lints permissions, hooks, MCP servers, skills, subagents and memory files for config that is silently broken, dangerously permissive, or quietly expensive.",
   "owner": {
     "name": "Julien QUENTIN",
