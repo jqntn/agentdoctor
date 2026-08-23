@@ -108,7 +108,8 @@ function card(file, { headline, sub, lines, size = 19, lh = 30, footer }) {
 }
 
 mkdirSync(OUT, { recursive: true });
-const FOOT = 'npx @jqntn/agentdoctor  -  zero dependencies  -  never reads your secrets  -  MIT';
+const DOT = ' \u00B7 ';
+const FOOT = ['npx @jqntn/agentdoctor', 'zero dependencies', 'never reads your secrets', 'MIT'].join(DOT);
 
 card('1-silent-failures.svg', {
   headline: 'Agent config fails silently. This does not.',
@@ -130,7 +131,7 @@ card('1-silent-failures.svg', {
     [['               the hook fails every time it fires.', C.fg]],
     [['               security/hook-script-not-executable', C.magenta]],
     null,
-    [['Summary  ', C.fg], ['Grade F', C.red], ['  3 errors  - 14ms', C.dimmer]],
+    [['Summary  ', C.fg], ['Grade F', C.red], ['  3 errors  (72 rules, 14ms)', C.dimmer]],
   ],
 });
 

@@ -63,7 +63,7 @@ CLAUDE.md
                  (~$25/month at 3,300 requests, assuming it stays prompt-cached).
                  cost/memory-file-too-large
 
-Summary  Grade F  3 errors, 1 warning  - 72 rules in 41ms
+Summary  Grade F  3 errors, 1 warning  (72 rules, 41ms)
 ```
 
 Zero dependencies. No network calls. Credential files are never opened. MIT — all of it.

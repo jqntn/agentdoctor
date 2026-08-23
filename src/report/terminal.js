@@ -120,7 +120,7 @@ function summaryLine(s, counts, input) {
   const summary = parts.length ? parts.join(', ') : s.green('clean');
   const grade = computeGrade(input.findings);
   const gradeColor = grade.startsWith('A') ? s.green : (grade === 'B' || grade === 'C' ? s.yellow : s.red);
-  lines.push(`${s.bold('Summary')}  ${s.bold(gradeColor(`Grade ${grade}`))}  ${summary}  ${s.dim(`- ${input.ran.length} rules in ${input.elapsedMs}ms`)}`);
+  lines.push(`${s.bold('Summary')}  ${s.bold(gradeColor(`Grade ${grade}`))}  ${summary}  ${s.dim(`(${input.ran.length} rules, ${input.elapsedMs}ms)`)}`);
 
   if (input.suppressed > 0) {
     const word = input.suppressed === 1 ? 'finding' : 'findings';
@@ -128,8 +128,9 @@ function summaryLine(s, counts, input) {
   }
   const skipped = input.workspace.skipped ?? [];
   if (skipped.length > 0) {
-    lines.push(s.dim(`         ${skipped.length} file(s) skipped - credential files are never read`));
+    const fileWord = skipped.length === 1 ? 'file' : 'files';
+    lines.push(s.dim(`         ${skipped.length} ${fileWord} skipped: credential files are never read`));
   }
-  lines.push(s.dim(`         Share the grade: agentdoctor --share  -  gate it in CI: agentdoctor --init-ci`));
+  lines.push(s.dim('         Share the grade with `agentdoctor --share`, or gate it in CI with `--init-ci`.'));
   return lines.join('\n');
 }
