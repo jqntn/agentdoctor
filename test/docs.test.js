@@ -148,3 +148,16 @@ test('no test derives a filesystem path from URL.pathname', async () => {
   }
   assert.deepEqual(offenders, [], `use fileURLToPath instead: ${offenders.join(', ')}`);
 });
+
+test('README HTML attributes contain no unescaped angle brackets', async () => {
+  // GitHub's markdown parser ends a raw HTML tag at the first '>' even inside a
+  // quoted attribute value, then autolinks the leftovers. alt="node >=20" was
+  // rendered as a broken <img> followed by the literal badge URL. npm's renderer
+  // is more lenient, so the README looked fine there and wrong on GitHub.
+  const readme = read('README.md');
+  const offenders = [];
+  for (const match of readme.matchAll(/<[a-zA-Z]+[^>]*?="([^"]*)"/g)) {
+    if (/[<>]/.test(match[1])) offenders.push(match[0].slice(0, 60));
+  }
+  assert.deepEqual(offenders, [], `escape as &lt; / &gt;: ${offenders.join(' | ')}`);
+});

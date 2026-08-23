@@ -10,7 +10,7 @@
     <a href="https://github.com/jqntn/agentdoctor/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/jqntn/agentdoctor/actions/workflows/ci.yml/badge.svg"></a>
     <a href="https://www.npmjs.com/package/@jqntn/agentdoctor"><img alt="npm" src="https://img.shields.io/npm/v/%40jqntn%2Fagentdoctor"></a>
     <img alt="zero dependencies" src="https://img.shields.io/badge/dependencies-0-34D399">
-    <img alt="node >=20" src="https://img.shields.io/badge/node-%3E%3D20-64748B">
+    <img alt="node &gt;=20" src="https://img.shields.io/badge/node-%3E%3D20-64748B">
     <a href="LICENSE"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-blue"></a>
   </p>
 
