@@ -109,3 +109,25 @@ test('the whole git history follows Conventional Commits', async () => {
   }
   assert.deepEqual(offenders, [], offenders.join(' | '));
 });
+
+test('every tracked path is checkout-safe on Windows', async () => {
+  // Regression: a stray file named "socket:[590904]" was committed, and every
+  // windows-latest job then failed at actions/checkout with "invalid path"
+  // before a single test ran. Windows forbids : * ? " < > | in filenames, plus
+  // trailing dots and spaces, and reserves a handful of device names.
+  const { execFileSync } = await import('node:child_process');
+  const root = new URL('..', import.meta.url).pathname;
+  const tracked = execFileSync('git', ['-C', root, 'ls-files'], { encoding: 'utf8' })
+    .split('\n').filter(Boolean);
+
+  const RESERVED = /^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\.|$)/i;
+  const offenders = [];
+  for (const path of tracked) {
+    for (const segment of path.split('/')) {
+      if (/[:*?"<>|]/.test(segment)) offenders.push(`${path}: illegal character`);
+      else if (/[. ]$/.test(segment)) offenders.push(`${path}: trailing dot or space`);
+      else if (RESERVED.test(segment)) offenders.push(`${path}: reserved device name`);
+    }
+  }
+  assert.deepEqual(offenders, [], offenders.join('; '));
+});
