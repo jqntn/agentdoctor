@@ -175,13 +175,32 @@ function page({ title, description, body, path, isDocs }) {
 ${body}
 <script>
 for (const pre of document.querySelectorAll('pre')) {
+  // The button lives on a wrapper, not inside the <pre>. A <pre> is its own
+  // horizontal scroll container, so a button positioned inside it slides away
+  // with the content when a long line is scrolled.
+  const wrap = document.createElement('div');
+  wrap.className = 'code-wrap';
+  pre.parentNode.insertBefore(wrap, pre);
+  wrap.appendChild(pre);
+
   const b = document.createElement('button');
-  b.className = 'copy'; b.textContent = 'copy'; b.setAttribute('aria-label', 'Copy code');
-  b.addEventListener('click', () => {
-    navigator.clipboard.writeText(pre.querySelector('code').innerText);
-    b.textContent = 'copied'; setTimeout(() => { b.textContent = 'copy'; }, 1200);
+  b.className = 'copy';
+  b.type = 'button';
+  b.textContent = 'copy';
+  b.setAttribute('aria-label', 'Copy to clipboard');
+  b.addEventListener('click', async () => {
+    // The terminal demo is a bare <pre> with no <code> child, so fall back to
+    // the <pre> itself rather than dereferencing null.
+    const source = pre.querySelector('code') || pre;
+    try {
+      await navigator.clipboard.writeText(source.innerText);
+      b.textContent = 'copied';
+    } catch {
+      b.textContent = 'press ctrl+c';
+    }
+    setTimeout(() => { b.textContent = 'copy'; }, 1400);
   });
-  pre.appendChild(b);
+  wrap.appendChild(b);
 }
 </script>
 </body>
