@@ -30,6 +30,7 @@ const DOCS = [
   ['agents', 'For agents'],
   ['architecture', 'Architecture'],
   ['faq', 'FAQ'],
+  ['privacy', 'Privacy'],
 ];
 
 // ---------------------------------------------------------------------------
