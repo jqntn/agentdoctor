@@ -5,8 +5,8 @@ description: Audit and fix AI coding-agent configuration with agentdoctor. Use w
 
 # Audit agent configuration with agentdoctor
 
-agentdoctor is a zero-dependency linter for agent config (72 rules: security, correctness,
-cost, hygiene, team policy). It makes no network calls and never opens credential files, so it
+agentdoctor is a zero-dependency linter for agent config, covering security, correctness,
+cost, hygiene and team policy. It makes no network calls and never opens credential files, so it
 is safe to run unattended in any project.
 
 ## Run the audit

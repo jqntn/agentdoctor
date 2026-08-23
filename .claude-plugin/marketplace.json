@@ -8,7 +8,7 @@
     {
       "name": "agentdoctor",
       "source": "./",
-      "description": "Audit and fix AI coding-agent configuration: 72 rules across security, correctness, cost, hygiene and team policy. Ships the config-audit skill and the /agentdoctor:audit command; the linter runs via npx."
+      "description": "Audit and fix AI coding-agent configuration across security, correctness, cost, hygiene and team policy. Ships the config-audit skill and the /agentdoctor:audit command; the linter runs via npx."
     }
   ]
 }

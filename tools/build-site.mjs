@@ -240,7 +240,7 @@ const landingBody = `${header('')}
   <h1>Your agent&#8217;s config fails <em>silently</em>.<br>This does not.</h1>
   <p class="sub">agentdoctor lints AI coding-agent configuration &mdash; permissions, hooks, MCP servers,
   skills, memory files &mdash; and reports what is broken, dangerous, or expensive, with line numbers
-  and fixes. ${allRules.length} rules. Zero dependencies. No telemetry. MIT.</p>
+  and fixes. Zero dependencies. No telemetry. MIT.</p>
   <div class="cta">
     <pre class="install"><code>npx @jqntn/agentdoctor</code></pre>
     <a class="btn" href="docs/getting-started.html">Get started</a>
@@ -262,7 +262,12 @@ const landingBody = `${header('')}
 </section>
 
 <section class="features">
-  <h2>${allRules.length} rules, five categories</h2>
+  <h2>What it checks</h2>
+  <p class="lede">The bar for a rule is that it catches a failure that actually happens
+  <em>and</em> stays quiet on legitimate config &mdash; a correctly configured project reports
+  nothing, asserted by a fixture in the test suite. False positives are treated as more severe
+  than missed findings, because a linter that cries wolf gets uninstalled and then catches
+  nothing at all. ${allRules.length} rules today, each with a test.</p>
   <div class="grid3">
     <div class="card"><h3>Security <span class="n">${count('security')}</span></h3><p>Pre-approved destructive commands, <code>curl | sh</code> hooks, committed credentials (always redacted), unpinned MCP packages, loader-hijacking env vars, world-writable config.</p></div>
     <div class="card"><h3>Correctness <span class="n">${count('correctness')}</span></h3><p>Invalid JSON that silently voids permission rules, misspelled keys and hook events with did-you-mean, dead deny rules, malformed hooks, duplicate agents.</p></div>

@@ -141,7 +141,7 @@ if gh repo view "${GH_USER}/${REPO_NAME}" >/dev/null 2>&1; then
   git push -u origin main
 else
   gh repo create "${REPO_NAME}" --public --source . --remote origin --push \
-    --description "Lint and grade your AI coding-agent configuration: permissions, hooks, MCP servers, skills, memory files. 72 rules, zero dependencies, MIT."
+    --description "Lint and grade your AI coding-agent configuration: permissions, hooks, MCP servers, skills, memory files. Zero dependencies, MIT."
   ok "repo created and pushed"
 fi
 
@@ -171,7 +171,8 @@ skills, subagents and memory files. Agent config has no feedback loop: a misspel
 never fires, a deny rule naming a nonexistent tool blocks nothing, \`Bash(*)\` auto-approves
 every command. Nothing errors. This finds all of it, with line numbers and fixes.
 
-**72 rules** — 22 security, 26 correctness, 8 cost, 8 hygiene, 8 team policy.
+Rules cover security, correctness, cost, hygiene and team policy. A correctly configured
+project reports nothing — false positives are treated as more severe than missed findings.
 
 - Health grade (A+ to F) on every audit; \`--share\` for a safe score card, \`--badge\` for the README
 - One-command adoption: \`--init-ci\` (GitHub Actions + SARIF PR annotations), \`--init-skill\`

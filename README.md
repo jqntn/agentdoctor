@@ -70,10 +70,17 @@ Zero dependencies. No network calls. Credential files are never opened. MIT — 
 
 ## What it checks
 
-**72 rules across five categories.** Full reasoning for every rule:
-[rule reference](docs/rules.md), or `agentdoctor --explain <rule-id>`.
+Findings fall into five categories. The bar for a rule is that it catches a failure that
+actually happens **and** stays quiet on legitimate config: a correctly configured project
+reports nothing, which the test suite asserts against a fixture. False positives are treated
+as more severe than missed findings, because a linter that cries wolf gets uninstalled and
+then catches nothing at all.
 
-### Security (22 rules)
+Every rule states what is wrong, why it matters, and what to change instead, and every rule
+has a test. There are 72 today; the current catalogue is always in the
+[rule reference](docs/rules.md), or `agentdoctor --list-rules`.
+
+### Security
 
 The config surface is an execution surface. Blanket `Bash(*)` allows; destructive commands
 pre-approved without confirmation (`sudo`, `rm -rf`, force push, `terraform destroy`,
@@ -83,7 +90,7 @@ Slack, Stripe keys, JWTs, private keys — always reported **redacted**); MCP se
 unpinned packages or carrying tokens in URLs; `bypassPermissions` committed to shared repos;
 loader-hijacking env vars; world-writable config.
 
-### Correctness (26 rules)
+### Correctness
 
 Config that is silently ignored is worse than config that errors, because you believe it is
 working. Invalid JSON (which voids the whole file, permission rules included); misspelled
@@ -92,7 +99,7 @@ that block nothing (an **error**, because it is a guardrail that only looks like
 malformed hooks and invalid matcher regexes; duplicate agent/skill names; MCP servers with no
 way to start.
 
-### Cost (8 rules)
+### Cost
 
 Memory files and MCP tool schemas ride along on every request. Token counts for every memory
 file with an estimated monthly cost — the estimate assumes the file stays prompt-cached
@@ -100,13 +107,13 @@ file with an estimated monthly cost — the estimate assumes the file stays prom
 duplicated across files; pasted code blocks that belong behind a file path; skill
 descriptions too vague for the model to ever load them.
 
-### Hygiene (8 rules)
+### Hygiene
 
 `settings.local.json` not gitignored; machine-specific absolute paths in committed config;
 local settings silently shadowing project settings; empty skill/agent bodies; duplicate
 keybindings.
 
-### Policy (8 rules)
+### Policy
 
 Team standards, enforced mechanically across every repo. Commit an
 `agentdoctor.policy.json` and these activate — no flag, no account:
@@ -192,7 +199,7 @@ cp -r node_modules/@jqntn/agentdoctor/skills/config-audit .claude/skills/   # ma
 |---|---|
 | [Getting started](docs/getting-started.md) | Install, first run, reading findings, exit codes |
 | [Configuration](docs/configuration.md) | Every flag, suppression, disabling rules |
-| [Rule reference](docs/rules.md) | All 72 rules with reasoning |
+| [Rule reference](docs/rules.md) | Every rule, with the reasoning behind it |
 | [CI setup](docs/ci.md) | GitHub Actions, SARIF, exit-code gating |
 | [Baselines](docs/baselines.md) | Adopting on an existing repo |
 | [Team policy](docs/policy.md) | One standard across many repos |
@@ -212,4 +219,4 @@ invariants (every rule tested, zero findings on the clean fixture, zero dependen
 
 ## License
 
-[MIT](LICENSE). All 72 rules, every output format, no accounts, no telemetry, no paid tier.
+[MIT](LICENSE). Every rule, every output format, no accounts, no telemetry, no paid tier.

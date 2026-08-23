@@ -96,4 +96,4 @@ score card (rule ids and counts only - safe to share from private repos), and
 - [CI setup](ci.md) — SARIF annotations, exit-code gating
 - [Baselines](baselines.md) — adopting agentdoctor on a repo that already has findings
 - [Team policy](policy.md) — holding many repos to one standard
-- [Rule reference](rules.md) — all 72 rules and the reasoning behind each
+- [Rule reference](rules.md) — every rule and the reasoning behind it

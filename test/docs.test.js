@@ -7,19 +7,22 @@ import { fileURLToPath } from 'node:url';
 
 const read = (name) => readFileSync(fileURLToPath(new URL(`../${name}`, import.meta.url)), 'utf8');
 
-test('the README rule counts match the catalogue', () => {
-  // Marketing copy that drifts from the code is how a tool loses trust on the
-  // first run, so the counts are asserted rather than maintained by hand.
+test('the README leads on rule quality, not a rule count', () => {
+  // A hardcoded total drifts every time a rule lands, and it sells the wrong
+  // thing: the differentiator is that a correct project reports nothing, not
+  // that the catalogue is large.
   const readme = read('README.md');
-  assert.match(readme, new RegExp(`\\*\\*${allRules.length} rules`),
-    `README should claim ${allRules.length} rules`);
-  for (const category of CATEGORIES) {
-    if (category === 'policy') continue;
-    const count = allRules.filter((r) => r.category === category).length;
-    const heading = category[0].toUpperCase() + category.slice(1);
-    assert.match(readme, new RegExp(`### ${heading} \\(${count} rules\\)`),
-      `README heading for ${category} should say ${count} rules`);
-  }
+  // The count may appear as supporting detail, but must not lead a section or
+  // the document - the differentiator is the quality bar, not the total.
+  const headings = [...readme.matchAll(/^#{1,3} (.+)$/gm)].map((m) => m[1]);
+  assert.deepEqual(headings.filter((h) => /\d+ rules/.test(h)), [],
+    'no heading should advertise a rule count');
+  const whatItChecks = readme.split('## What it checks')[1]?.split('###')[0] ?? '';
+  assert.ok(whatItChecks.indexOf('reports nothing') < whatItChecks.indexOf('72'),
+    'the quality claim should come before the count');
+  assert.match(readme, /reports nothing/, 'the clean-project claim should be stated');
+  assert.match(readme, /False positives are treated as more severe/,
+    'the false-positive stance is the core quality claim');
 });
 
 test('the README does not promise a paid tier', () => {

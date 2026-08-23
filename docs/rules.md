@@ -1,6 +1,7 @@
 # Rule reference
 
-72 rules. `agentdoctor --explain <rule-id>` prints any of these from the CLI.
+Every rule, with the reasoning behind it - 72 in total. `agentdoctor --explain <rule-id>`
+prints any of these from the CLI, and `--list-rules` prints the catalogue.
 
 ## Correctness
 

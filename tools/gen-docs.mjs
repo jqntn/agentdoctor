@@ -14,7 +14,8 @@ const TITLES = {
 const lines = [
   '# Rule reference',
   '',
-  `${allRules.length} rules. \`agentdoctor --explain <rule-id>\` prints any of these from the CLI.`,
+  `Every rule, with the reasoning behind it - ${allRules.length} in total. \`agentdoctor --explain <rule-id>\``,
+  'prints any of these from the CLI, and `--list-rules` prints the catalogue.',
   '',
 ];
 

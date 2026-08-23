@@ -15,5 +15,5 @@
   <text x="100" y="392" font-family="ui-monospace,'JetBrains Mono','SF Mono',SFMono-Regular,Menlo,Consolas,monospace" font-size="28" fill="#64748B">Permissions &#183; hooks &#183; MCP servers &#183; skills &#183; memory files</text>
   <rect x="96" y="452" width="517" height="76" rx="14" fill="#020617" stroke="#1E293B" stroke-width="2"/>
   <text x="126" y="501" font-family="ui-monospace,'JetBrains Mono','SF Mono',SFMono-Regular,Menlo,Consolas,monospace" font-size="32"><tspan fill="#34D399">$</tspan><tspan fill="#F1F5F9" dx="14">npx @jqntn/agentdoctor</tspan></text>
-  <text x="100" y="584" font-family="ui-monospace,'JetBrains Mono','SF Mono',SFMono-Regular,Menlo,Consolas,monospace" font-size="26" fill="#64748B">72 rules &#183; zero dependencies &#183; no telemetry &#183; MIT</text>
+  <text x="100" y="584" font-family="ui-monospace,'JetBrains Mono','SF Mono',SFMono-Regular,Menlo,Consolas,monospace" font-size="26" fill="#64748B">zero dependencies &#183; no telemetry &#183; never reads your secrets &#183; MIT</text>
 </svg>
