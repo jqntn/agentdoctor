@@ -116,7 +116,7 @@ test('every tracked path is checkout-safe on Windows', async () => {
   // before a single test ran. Windows forbids : * ? " < > | in filenames, plus
   // trailing dots and spaces, and reserves a handful of device names.
   const { execFileSync } = await import('node:child_process');
-  const root = new URL('..', import.meta.url).pathname;
+  const root = fileURLToPath(new URL('..', import.meta.url));
   const tracked = execFileSync('git', ['-C', root, 'ls-files'], { encoding: 'utf8' })
     .split('\n').filter(Boolean);
 
@@ -130,4 +130,21 @@ test('every tracked path is checkout-safe on Windows', async () => {
     }
   }
   assert.deepEqual(offenders, [], offenders.join('; '));
+});
+
+test('no test derives a filesystem path from URL.pathname', async () => {
+  // Reading the pathname of a file: URL has broken windows-latest three times:
+  // there it yields "/D:/a/repo", which is not a valid path for fs or git -C.
+  // Always convert with fileURLToPath. Guarded here so it fails in a second
+  // locally rather than after three Windows jobs die.
+  const { readdirSync } = await import('node:fs');
+  const dir = fileURLToPath(new URL('.', import.meta.url));
+  const offenders = [];
+  for (const file of readdirSync(dir).filter((f) => f.endsWith('.js'))) {
+    const text = readFileSync(join(dir, file), 'utf8');
+    // Assembled from fragments so this guard does not match its own source.
+    const banned = new RegExp('new URL\\([^)]*\\)\\.' + 'path' + 'name');
+    if (banned.test(text)) offenders.push(file);
+  }
+  assert.deepEqual(offenders, [], `use fileURLToPath instead: ${offenders.join(', ')}`);
 });
