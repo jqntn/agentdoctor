@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.1.5
+
+No change to the rules, CLI or output. The packaged tarball is identical to 0.1.4 apart from the
+version string; everything below is on the website, which deploys from `main` and has been live
+since it was pushed. The release exists so the tag, the npm version and the plugin manifest keep
+agreeing with each other.
+
+- `fix(site)`: the copy button on the landing page's terminal demo copied nothing. It read from
+  the element it was appended to rather than the `<code>` inside it, so the one snippet a visitor
+  is most likely to try was the one that silently failed. It also scrolled away with the code
+  block on narrow screens; it is now pinned to the frame.
+- `style(site)`: the two footer badges are stacked at a matched width instead of sitting side by
+  side at whatever intrinsic size each provider's image happened to be.
+- `docs(site)`: the about section no longer opens on a rule count.
+
 ## 0.1.4
 
 - `fix(rules)`: 14 real settings keys were reported as unrecognised, including
