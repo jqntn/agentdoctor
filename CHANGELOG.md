@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.1.6
+
+- `feat`: the repository is now a GitHub Action. `uses: jqntn/agentdoctor@v0` uploads the
+  SARIF to code scanning, prints the findings to the log, and fails the job on errors. The
+  action runs the tool from its own checkout, so the action tag and the tool version always
+  agree, and the job makes no npm call. Pass extra flags through `args`. Set `upload-sarif:
+  false` where code scanning is not available. The release workflow moves `v0` to each new
+  0.x release. Pin `@v0.1.6` to stay on one version.
+- `ci`: the self-check SARIF upload on `main` failed on every push, because the workflow token
+  had no `security-events: write` permission. `continue-on-error` hid the failure. The job now
+  runs the action with that permission and no longer hides errors.
+
 ## 0.1.5
 
 No change to the rules, CLI or output. The packaged tarball is identical to 0.1.4 apart from the
