@@ -232,4 +232,4 @@ function displayPath(path, root, home) {
   return toPosix(path);
 }
 
-export { NEVER_READ, SKIP_DIRS };
+export { NEVER_READ, SKIP_DIRS, displayPath };

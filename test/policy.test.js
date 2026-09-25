@@ -53,6 +53,7 @@ test('a broken policy file is reported rather than silently ignored', () => {
     const hits = findingsFor(scan(root), 'policy/file-invalid');
     assert.equal(hits.length, 1);
     assert.match(hits[0].message, /No policy rules were enforced/);
+    assert.equal(hits[0].display, 'agentdoctor.policy.json');
   } finally {
     cleanup(root);
   }

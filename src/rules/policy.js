@@ -1,6 +1,8 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { homedir } from 'node:os';
+import { join, resolve } from 'node:path';
 import { parseJsonWithPositions } from '../parse.js';
+import { displayPath } from '../discover.js';
 
 /**
  * Team policy enforcement.
@@ -34,11 +36,12 @@ export function loadPolicy(root, explicitPath) {
   const candidates = explicitPath ? [explicitPath] : POLICY_FILENAMES.map((name) => join(root, name));
   for (const candidate of candidates) {
     if (!existsSync(candidate)) continue;
+    const display = displayPath(resolve(candidate), resolve(root), homedir());
     try {
       const { value } = parseJsonWithPositions(readFileSync(candidate, 'utf8'));
-      return { policy: value, path: candidate };
+      return { policy: value, path: candidate, display };
     } catch (error) {
-      return { policy: null, path: candidate, error: error.message };
+      return { policy: null, path: candidate, display, error: error.message };
     }
   }
   return { policy: null, path: null };
@@ -276,10 +279,10 @@ export const policyRules = [
     title: 'Policy file could not be read',
     help: 'A policy that fails to parse enforces nothing, which is the most dangerous state for a guardrail to be in.',
     check({ workspace, report }) {
-      const { path, error } = workspace.policy ?? {};
+      const { path, display, error } = workspace.policy ?? {};
       if (!path || !error) return;
       report({
-        file: { path, display: path },
+        file: { path, display },
         line: 1,
         message: `Policy file failed to parse: ${error}. No policy rules were enforced.`,
       });
