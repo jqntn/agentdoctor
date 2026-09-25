@@ -18,24 +18,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: 22 }
-
-      # continue-on-error so the SARIF still uploads when findings exist;
-      # the gate job below is what actually fails the build.
-      - run: npx @jqntn/agentdoctor --no-user --sarif > agentdoctor.sarif
-        continue-on-error: true
-
-      - uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: agentdoctor.sarif
-
-      - name: Fail on errors
-        run: npx @jqntn/agentdoctor --no-user --quiet
+      - uses: jqntn/agentdoctor@v0
 ```
 
-`--no-user` matters in CI: there is no `~/.claude` on a runner, and scanning it locally would
-report findings a reviewer cannot act on.
+The action uploads the SARIF to code scanning, prints the findings to the log, and fails the
+job on errors. It always passes `--no-user`, because a runner has no `~/.claude`. It needs
+Node 20 or later on the `PATH`. GitHub-hosted runners include it.
+
+| Input | Default | Meaning |
+|---|---|---|
+| `args` | `''` | Extra flags, for example `--max-warnings 0` or `--baseline .agentdoctor-baseline.json` |
+| `upload-sarif` | `true` | Set to `false` when code scanning is not available, for example on a private repo without GitHub Advanced Security |
 
 ## Any other CI
 

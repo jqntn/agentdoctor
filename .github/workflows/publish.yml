@@ -85,3 +85,16 @@ jobs:
           else
             echo "$NAME@$VERSION is unpublished and the tarball builds; ready to release"
           fi
+
+  major-tag:
+    needs: publish
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          MAJOR="${GITHUB_REF_NAME%%.*}"
+          git tag -f "$MAJOR"
+          git push -f origin "refs/tags/$MAJOR"

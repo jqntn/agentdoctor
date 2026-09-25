@@ -1,0 +1,42 @@
+name: agentdoctor audit
+description: Lint AI coding-agent config (permissions, hooks, MCP servers, skills, CLAUDE.md) and annotate pull requests.
+author: Julien QUENTIN
+branding:
+  icon: activity
+  color: green
+
+inputs:
+  args:
+    description: 'Extra agentdoctor flags, for example `--max-warnings 0` or `--baseline .agentdoctor-baseline.json`.'
+    required: false
+    default: ''
+  upload-sarif:
+    description: 'Upload the findings to GitHub code scanning, so that they annotate the pull request diff. Needs `security-events: write`.'
+    required: false
+    default: 'true'
+
+runs:
+  using: composite
+  steps:
+    - name: Write SARIF
+      if: inputs.upload-sarif == 'true'
+      shell: bash
+      env:
+        AGENTDOCTOR_ARGS: ${{ inputs.args }}
+      run: |
+        code=0
+        node "$GITHUB_ACTION_PATH/bin/agentdoctor.js" --no-user $AGENTDOCTOR_ARGS --sarif > "$RUNNER_TEMP/agentdoctor.sarif" || code=$?
+        [ "$code" -le 1 ] || exit "$code"
+
+    - name: Upload SARIF
+      if: inputs.upload-sarif == 'true'
+      uses: github/codeql-action/upload-sarif@v4
+      with:
+        sarif_file: ${{ runner.temp }}/agentdoctor.sarif
+        category: agentdoctor
+
+    - name: Audit
+      shell: bash
+      env:
+        AGENTDOCTOR_ARGS: ${{ inputs.args }}
+      run: node "$GITHUB_ACTION_PATH/bin/agentdoctor.js" --no-user --color $AGENTDOCTOR_ARGS

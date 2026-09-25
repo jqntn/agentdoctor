@@ -167,11 +167,12 @@ safe to post from private repos.
 ## CI
 
 ```yaml
-- run: npx @jqntn/agentdoctor --no-user --sarif > agentdoctor.sarif
-  continue-on-error: true
-- uses: github/codeql-action/upload-sarif@v3
-  with: { sarif_file: agentdoctor.sarif }
-- run: npx @jqntn/agentdoctor --no-user --quiet   # exit 1 on errors
+permissions:
+  contents: read
+  security-events: write
+steps:
+  - uses: actions/checkout@v4
+  - uses: jqntn/agentdoctor@v0   # SARIF annotations on the PR, exit 1 on errors
 ```
 
 Findings annotate the PR diff via SARIF. Adopting on a repo with existing findings? Record
