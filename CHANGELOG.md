@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.1.7
+
+- `feat(adopt)`: `--init-ci` now writes a workflow that uses `jqntn/agentdoctor@v0`, in place
+  of `npx` plus `upload-sarif@v3`. The comments in the file show how to add a baseline and how
+  to turn off the upload.
+- `fix(report)`: SARIF artifact URIs now come from the display path. On Windows they used
+  backslashes, so code scanning could not map the findings to files. A user-scope file such as
+  `~/.claude/agents/foo.md` became `.claude/agents/foo.md`, so its alert went on the project
+  file with the same name. The URI also held the user name. Now the URI is `~/.claude/...`,
+  and each segment is percent-encoded.
+- `fix(report)`: the SARIF fingerprint used the line number when a finding had no config path,
+  so an unrelated edit above a finding opened a new alert. It now uses the baseline fingerprint.
+  Open code scanning alerts from agentdoctor close and open again one time after this upgrade.
+- `fix(rules)`: `policy/file-invalid` showed the absolute path of the policy file. It now shows
+  the repo-relative path, like every other finding.
+- `fix`: the action no longer fails the job when the SARIF upload fails, for example on a pull
+  request from a fork or a private repo without GHAS. The log shows a warning, and the audit
+  still fails the job on errors.
+
 ## 0.1.6
 
 - `feat`: the repository is now a GitHub Action. `uses: jqntn/agentdoctor@v0` uploads the
