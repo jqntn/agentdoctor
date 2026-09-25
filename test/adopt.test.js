@@ -67,9 +67,9 @@ test('--init-ci writes a working workflow once and refuses to overwrite', () => 
     const first = cli(['--init-ci', root]);
     assert.equal(first.code, 0);
     const workflow = readFileSync(join(root, '.github/workflows/agentdoctor.yml'), 'utf8');
-    assert.match(workflow, /npx @jqntn\/agentdoctor --no-user --sarif/);
-    assert.match(workflow, /upload-sarif/);
-    assert.match(workflow, /npx @jqntn\/agentdoctor --no-user --quiet/);
+    assert.match(workflow, /uses: jqntn\/agentdoctor@v0\n/);
+    assert.match(workflow, /security-events: write/);
+    assert.match(workflow, /upload-sarif: false/);
     assert.match(workflow, /write-baseline/, 'the baseline escape hatch must be documented in the file itself');
     assert.equal(cli(['--init-ci', root]).code, 2, 'must not overwrite an existing workflow');
   } finally {

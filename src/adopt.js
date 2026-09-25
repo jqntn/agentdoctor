@@ -31,24 +31,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
 
-      # Findings annotate the PR diff via code scanning.
-      - run: npx @jqntn/agentdoctor --no-user --sarif > agentdoctor.sarif
-        continue-on-error: true
-      - uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: agentdoctor.sarif
-        continue-on-error: true
-
-      # The actual gate: exit 1 on errors.
-      # Adopting on a repo with existing findings? Commit a baseline first:
+      # Findings annotate the PR diff via code scanning, and errors fail the job.
+      # To adopt on a repo with existing findings, commit a baseline first:
       #   npx @jqntn/agentdoctor --no-user --write-baseline .agentdoctor-baseline.json
-      # then change the line below to:
-      #   npx @jqntn/agentdoctor --no-user --baseline .agentdoctor-baseline.json --quiet
-      - run: npx @jqntn/agentdoctor --no-user --quiet
+      # Optional inputs, both in one "with:" block under the step below:
+      #   with:
+      #     args: --baseline .agentdoctor-baseline.json
+      #     upload-sarif: false   # when code scanning is not available
+      - uses: jqntn/agentdoctor@v0
 `;
 
 export const SKILL_PATH = '.claude/skills/config-audit';
