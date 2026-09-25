@@ -23,7 +23,9 @@ jobs:
 
 The action uploads the SARIF to code scanning, prints the findings to the log, and fails the
 job on errors. It always passes `--no-user`, because a runner has no `~/.claude`. It needs
-Node 20 or later on the `PATH`. GitHub-hosted runners include it.
+Node 20 or later on the `PATH`. GitHub-hosted runners include it. If the upload fails, for
+example on a pull request from a fork, the log shows a warning. The audit still runs and fails
+the job on errors.
 
 | Input | Default | Meaning |
 |---|---|---|
