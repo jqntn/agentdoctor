@@ -1,5 +1,5 @@
-import { relative, isAbsolute } from 'node:path';
 import { allRules } from '../rules/index.js';
+import { fingerprint } from '../engine.js';
 import { REPO_URL } from '../links.js';
 
 const SARIF_LEVEL = { error: 'error', warning: 'warning', info: 'note' };
@@ -44,7 +44,7 @@ export function renderSarif(input) {
         message: { text: finding.help ? `${finding.message} ${finding.help}` : finding.message },
         locations: [{
           physicalLocation: {
-            artifactLocation: { uri: toUri(finding.file, input.workspace.root) },
+            artifactLocation: { uri: finding.display.split('/').map(encodeURIComponent).join('/') },
             region: {
               startLine: Math.max(1, finding.line),
               ...(finding.column ? { startColumn: finding.column } : {}),
@@ -52,17 +52,9 @@ export function renderSarif(input) {
           },
         }],
         partialFingerprints: {
-          agentdoctorFingerprint: `${finding.ruleId}:${finding.display}:${finding.configPath ?? finding.line}`,
+          agentdoctorFingerprint: fingerprint(finding),
         },
       })),
     }],
   }, null, 2);
-}
-
-function toUri(absolutePath, root) {
-  if (!isAbsolute(absolutePath)) return absolutePath;
-  const rel = relative(root, absolutePath);
-  // Paths outside the repo (user-scope config) have no meaningful CI location;
-  // keep a short suffix rather than leaking an absolute home directory.
-  return rel.startsWith('..') ? absolutePath.split('/').slice(-3).join('/') : rel;
 }

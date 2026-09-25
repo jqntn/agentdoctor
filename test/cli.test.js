@@ -4,6 +4,7 @@ import { execFileSync, execSync } from 'node:child_process';
 import { readFileSync, existsSync, unlinkSync } from 'node:fs';
 import { join } from 'node:path';
 import { makeProject, cleanup, posixOnly } from './helpers.js';
+import { renderSarif } from '../src/report/sarif.js';
 import { fileURLToPath } from 'node:url';
 
 const CLI = fileURLToPath(new URL('../bin/agentdoctor.js', import.meta.url));
@@ -88,8 +89,21 @@ test('--sarif emits valid SARIF 2.1.0 with resolvable rule indices', () => {
       'ruleIndex must point at the matching rule definition');
     const uri = result.locations[0].physicalLocation.artifactLocation.uri;
     assert.ok(!uri.startsWith('/'), `SARIF uri should be repo-relative, got ${uri}`);
+    assert.ok(!uri.includes('\\'), `SARIF uri should use forward slashes, got ${uri}`);
     assert.ok(result.locations[0].physicalLocation.region.startLine >= 1);
   }
+});
+
+test('SARIF uris come from the display path and fingerprints ignore the line', () => {
+  const finding = (display, line) => ({
+    ruleId: 'hygiene/x', severity: 'warning', message: 'm', display, line, file: '/abs',
+  });
+  const render = (findings) => JSON.parse(renderSarif({ findings, version: '0', workspace: { root: '/abs' } })).runs[0].results;
+  const [home, spaced] = render([finding('~/.claude/agents/foo.md', 3), finding('.claude/agents/a b#1.md', 1)]);
+  assert.equal(home.locations[0].physicalLocation.artifactLocation.uri, '~/.claude/agents/foo.md');
+  assert.equal(spaced.locations[0].physicalLocation.artifactLocation.uri, '.claude/agents/a%20b%231.md');
+  const [moved] = render([finding('~/.claude/agents/foo.md', 9)]);
+  assert.equal(moved.partialFingerprints.agentdoctorFingerprint, home.partialFingerprints.agentdoctorFingerprint);
 });
 
 test('--quiet prints nothing but keeps the exit code', () => {

@@ -69,10 +69,10 @@ agentdoctor --no-user --sarif > agentdoctor.sarif
 Properties worth knowing:
 
 - Severities map `error → error`, `warning → warning`, `info → note`.
-- `partialFingerprints.agentdoctorFingerprint` gives stable finding identity across runs, so
-  GitHub tracks findings as "existing" rather than re-announcing them per commit.
-- Artifact URIs are repo-relative. Files outside the repo (user scope) are shortened to a
-  suffix rather than leaking an absolute home path into CI logs.
+- `partialFingerprints.agentdoctorFingerprint` is the baseline fingerprint. It has no line
+  number, so GitHub keeps one alert for a finding when unrelated lines move.
+- Artifact URIs are repo-relative and use forward slashes on every OS. Files in the home
+  directory (user scope) show as `~/...`, so no user name gets into CI logs.
 - Every rule referenced by a result includes its full description and help text in
   `tool.driver.rules`, so the annotation is self-explanatory in the GitHub UI.
 
